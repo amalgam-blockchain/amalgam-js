@@ -1,110 +1,6 @@
 export default [
     {
       "api": "database_api",
-      "method": "set_subscribe_callback",
-      "params": ["callback", "clearFilter"]
-    },
-    {
-      "api": "database_api",
-      "method": "set_pending_transaction_callback",
-      "params": ["cb"]
-    },
-    {
-      "api": "database_api",
-      "method": "set_block_applied_callback",
-      "params": ["cb"]
-    },
-    {
-      "api": "database_api",
-      "method": "cancel_all_subscriptions"
-    },
-    {
-      "api": "database_api",
-      "method": "get_trending_tags",
-      "params": ["afterTag", "limit"]
-    },
-    {
-      "api": "database_api",
-      "method": "get_tags_used_by_author",
-      "params": ["author"]
-    },
-    {
-      "api": "database_api",
-      "method": "get_post_discussions_by_payout",
-      "params": ["query"]
-    },
-    {
-      "api": "database_api",
-      "method": "get_comment_discussions_by_payout",
-      "params": ["query"]
-    },
-    {
-      "api": "database_api",
-      "method": "get_discussions_by_trending",
-      "params": ["query"]
-    },
-    {
-      "api": "database_api",
-      "method": "get_discussions_by_trending30",
-      "params": ["query"]
-    },
-    {
-      "api": "database_api",
-      "method": "get_discussions_by_created",
-      "params": ["query"]
-    },
-    {
-      "api": "database_api",
-      "method": "get_discussions_by_active",
-      "params": ["query"]
-    },
-    {
-      "api": "database_api",
-      "method": "get_discussions_by_cashout",
-      "params": ["query"]
-    },
-    {
-      "api": "database_api",
-      "method": "get_discussions_by_payout",
-      "params": ["query"]
-    },
-    {
-      "api": "database_api",
-      "method": "get_discussions_by_votes",
-      "params": ["query"]
-    },
-    {
-      "api": "database_api",
-      "method": "get_discussions_by_children",
-      "params": ["query"]
-    },
-    {
-      "api": "database_api",
-      "method": "get_discussions_by_hot",
-      "params": ["query"]
-    },
-    {
-      "api": "database_api",
-      "method": "get_discussions_by_feed",
-      "params": ["query"]
-    },
-    {
-      "api": "database_api",
-      "method": "get_discussions_by_blog",
-      "params": ["query"]
-    },
-    {
-      "api": "database_api",
-      "method": "get_discussions_by_comments",
-      "params": ["query"]
-    },
-    {
-      "api": "database_api",
-      "method": "get_discussions_by_promoted",
-      "params": ["query"]
-    },
-    {
-      "api": "database_api",
       "method": "get_block_header",
       "params": ["blockNum"]
     },
@@ -117,31 +13,6 @@ export default [
       "api": "database_api",
       "method": "get_ops_in_block",
       "params": ["blockNum", "onlyVirtual"]
-    },
-    {
-      "api": "database_api",
-      "method": "get_state",
-      "params": ["path"]
-    },
-    {
-      "api": "database_api",
-      "method": "get_trending_categories",
-      "params": ["after", "limit"]
-    },
-    {
-      "api": "database_api",
-      "method": "get_best_categories",
-      "params": ["after", "limit"]
-    },
-    {
-      "api": "database_api",
-      "method": "get_active_categories",
-      "params": ["after", "limit"]
-    },
-    {
-      "api": "database_api",
-      "method": "get_recent_categories",
-      "params": ["after", "limit"]
     },
     {
       "api": "database_api",
@@ -184,11 +55,6 @@ export default [
       "api": "database_api",
       "method": "get_accounts",
       "params": ["names"]
-    },
-    {
-      "api": "database_api",
-      "method": "get_account_references",
-      "params": ["accountId"]
     },
     {
       "api": "database_api",
@@ -379,57 +245,6 @@ export default [
     {
       "api": "login_api",
       "method": "get_version"
-    },
-    {
-      "api": "follow_api",
-      "method": "get_followers",
-      "params": ["following", "startFollower", "followType", "limit"]
-    },
-    {
-      "api": "follow_api",
-      "method": "get_following",
-      "params": ["follower", "startFollowing", "followType", "limit"]
-    },
-    {
-      "api": "follow_api",
-      "method": "get_follow_count",
-      "params": ["account"]
-    },
-    {
-      "api": "follow_api",
-      "method": "get_feed_entries",
-      "params": ["account", "entryId", "limit"
-      ]
-    },
-    {
-      "api": "follow_api",
-      "method": "get_feed",
-      "params": ["account", "entryId", "limit"]
-    },
-    {
-      "api": "follow_api",
-      "method": "get_blog_entries",
-      "params": ["account", "entryId", "limit"]
-    },
-    {
-      "api": "follow_api",
-      "method": "get_blog",
-      "params": ["account", "entryId", "limit"]
-    },
-    {
-      "api": "follow_api",
-      "method": "get_account_reputations",
-      "params": ["lowerBoundName", "limit"]
-    },
-    {
-      "api": "follow_api",
-      "method": "get_reblogged_by",
-      "params": ["author", "permlink"]
-    },
-    {
-      "api": "follow_api",
-      "method": "get_blog_authors",
-      "params": ["blogAccount"]
     },
     {
       "api": "network_broadcast_api",

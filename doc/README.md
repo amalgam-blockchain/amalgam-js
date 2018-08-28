@@ -4,8 +4,6 @@
 - [Browser](#browser)
 - [Config](#config)
 - [Database API](#api)
-    - [Subscriptions](#subscriptions)
-    - [Tags](#tags)
     - [Blocks and transactions](#blocks-and-transactions)
     - [Globals](#globals)
     - [Keys](#keys)
@@ -16,7 +14,6 @@
     - [Content](#content)
     - [Witnesses](#witnesses)
 - [Login API](#login)
-- [Follow API](#follow-api)
 - [Broadcast API](#broadcast-api)
 - [Broadcast](#broadcast)
 - [Auth](#auth)
@@ -56,151 +53,6 @@ amalgam.config.get('chain_id');
 
 # API
 
-## Subscriptions
-
-### Set Subscribe Callback
-```
-amalgam.api.setSubscribeCallback(callback, clearFilter, function(err, result) {
-  console.log(err, result);
-});
-```
-### Set Pending Transaction Callback
-```
-amalgam.api.setPendingTransactionCallback(cb, function(err, result) {
-  console.log(err, result);
-});
-```
-### Set Block Applied Callback
-```
-amalgam.api.setBlockAppliedCallback(cb, function(err, result) {
-  console.log(err, result);
-});
-```
-### Cancel All Subscriptions
-```
-amalgam.api.cancelAllSubscriptions(function(err, result) {
-  console.log(err, result);
-});
-```
-
-## Tags
-
-### Get Trending Tags
-```
-amalgam.api.getTrendingTags(afterTag, limit, function(err, result) {
-  console.log(err, result);
-});
-```
-### Get Discussions By Trending
-```
-amalgam.api.getDiscussionsByTrending(query, function(err, result) {
-  console.log(err, result);
-});
-```
-#### Example:
-```js
-/**
- * getDiscussionsByTrending() receiving posts by tags
- * @param {Object} query - A search object that includes tags and a limit or authors username and url-address of post
-*/
-var query = {
-  select_tags: ['dev', 'test'],
-  limit: 100,
-  //start_author: 'account1',
-  //start_permlink: 'test-url'
-};
-amalgam.api.getDiscussionsByTrending(query, function(err, result) {
-  //console.log(err, result);
-  if (!err) {
-    result.forEach(function(item) {
-      console.log('getDiscussionsByTrending', item.title);
-    });
-  }
-  else console.error(err);
-});
-```
-### Get Discussions By Created
-```
-amalgam.api.getDiscussionsByCreated(query, function(err, result) {
-  console.log(err, result);
-});
-```
-### Get Discussions By Active
-```
-amalgam.api.getDiscussionsByActive(query, function(err, result) {
-  console.log(err, result);
-});
-```
-### Get Discussions By Cashout
-```
-amalgam.api.getDiscussionsByCashout(query, function(err, result) {
-  console.log(err, result);
-});
-```
-### Get Discussions By Payout
-```
-amalgam.api.getDiscussionsByPayout(query, function(err, result) {
-  console.log(err, result);
-});
-```
-### Get Discussions By Votes
-```
-amalgam.api.getDiscussionsByVotes(query, function(err, result) {
-  console.log(err, result);
-});
-```
-### Get Discussions By Children
-```
-amalgam.api.getDiscussionsByChildren(query, function(err, result) {
-  console.log(err, result);
-});
-```
-### Get Discussions By Hot
-```
-amalgam.api.getDiscussionsByHot(query, function(err, result) {
-  console.log(err, result);
-});
-```
-### Get Discussions By Feed
-```
-amalgam.api.getDiscussionsByFeed(query, function(err, result) {
-  console.log(err, result);
-});
-```
-### Get Discussions By Blog
-```
-amalgam.api.getDiscussionsByBlog(query, function(err, result) {
-  console.log(err, result);
-});
-```
-#### Example:
-```js
-/**
- * getDiscussionsByBlog() receiving posts by author and tag
- * @param {Object} query - search object that includes the author, tag, limit
-*/
-var query = {
-  select_authors: ['account1'],
-  select_tags: ['dev'],
-  limit: 100
-};
-amalgam.api.getDiscussionsByBlog(query, function(err, result) {
-  //console.log(err, result);
-  if (!err) {
-    result.forEach(function(item) {
-      console.log('getDiscussionsByBlog', item.title);
-    });
-  }
-  else console.error(err);
-});
-```
-### Get Discussions By Comments
-```
-amalgam.api.getDiscussionsByComments(query, function(err, result) {
-  console.log(err, result);
-});
-```
-
 ## Blocks and transactions
 
 ### Get Block Header
@@ -212,36 +64,6 @@ amalgam.api.getBlockHeader(blockNum, function(err, result) {
 ### Get Block
 ```
 amalgam.api.getBlock(blockNum, function(err, result) {
-  console.log(err, result);
-});
-```
-### Get State
-```
-amalgam.api.getState(path, function(err, result) {
-  console.log(err, result);
-});
-```
-### Get Trending Categories
-```
-amalgam.api.getTrendingCategories(after, limit, function(err, result) {
-  console.log(err, result);
-});
-```
-### Get Best Categories
-```
-amalgam.api.getBestCategories(after, limit, function(err, result) {
-  console.log(err, result);
-});
-```
-### Get Active Categories
-```
-amalgam.api.getActiveCategories(after, limit, function(err, result) {
-  console.log(err, result);
-});
-```
-### Get Recent Categories
-```
-amalgam.api.getRecentCategories(after, limit, function(err, result) {
   console.log(err, result);
 });
 ```
@@ -362,7 +184,7 @@ amalgam.api.lookupAccounts(lowerBoundName, limit, function(err, result) {
 ```
 #### Example:
 ```js
-var searchAccountsQuery = 'epe';
+var searchAccountsQuery = 'acc';
 var limitResults = 10;
 amalgam.api.lookupAccounts(searchAccountsQuery, limitResults, function(err, result) {
   //console.log(err, result);
@@ -635,88 +457,6 @@ amalgam.api.getApiByName(apiName, function(err, result) {
 });
 ```
 
-## Follow API
-
-### Get Followers
-```
-amalgam.api.getFollowers(following, startFollower, followType, limit, function(err, result) {
-  console.log(err, result);
-});
-```
-#### Example
-```js
-/**
- * getFollowers() returns subscribers
- * @param {String} following - username whom return subscribers
- * @param {String} startFollower - position from which item to return result
- * @param {String} followType - subscription type, value: 'blog' or null
- * @param {Integer} limit - how many records to return, the maximum value: 100
-*/
-var following = 'account1';
-var startFollower = '';
-var followType = null;
-var limit = 100;
-amalgam.api.getFollowers(following, startFollower, followType, limit, function(err, result) {
-  //console.log(err, result);
-  if ( ! err) {
-    result.forEach(function(item) {
-      console.log('getFollowers', item);
-    });
-  }
-  else console.error(err);
-});
-```
-### Get Following
-```
-amalgam.api.getFollowing(follower, startFollowing, followType, limit, function(err, result) {
-  console.log(err, result);
-});
-```
-#### Example:
-```js
-/**
- * getFollowing() returns subscriptions
- * @param {String} follower - username subscriber
- * @param {String} startFollower - position from which item to return result
- * @param {String} followType - subscription type, value: 'blog' или null
- * @param {Integer} limit - how many records to return, the maximum value: 100
-*/
-var follower = 'account1';
-var startFollower = '';
-var followType = null;
-var limit = 100;
-amalgam.api.getFollowing(follower, startFollower, followType, limit, function(err, result) {
-  //console.log(err, result);
-  if ( ! err) {
-    result.forEach(function(item) {
-      console.log('getFollowing', item);
-    });
-  }
-  else console.error(err);
-});
-```
-### Get Follow Count
-```
-amalgam.api.getFollowCount(account, function(err, result) {
-  console.log(err, result);
-});
-```
-#### Example:
-```js
-/**
- * getFollowCount() returns count of subscribers and subscriptions
- * @param {String} account - username of the user to return data
-*/
-var account = 'account1';
-amalgam.api.getFollowCount(account, function(err, result) {
-  console.log(err, result);
-  if (!err) {
-    console.log('getFollowCount', result);
-  }
-  else console.error(err);
-});
-```
-
 ## Broadcast API
 
 ### Broadcast Transaction
@@ -857,40 +597,11 @@ amalgam.broadcast.comment(wif, parentAuthor, parentPermlink, author, permlink, t
 */
 var wif = '5K...';
 var parentAuthor = '';
-var parentPermlink = 'dev';
+var parentPermlink = 'reflection';
 var author = 'account1';
 var permlink = 'test-url';
-var title = 'test';
-var body = 'test2';
-var jsonMetadata = '{}';
-amalgam.broadcast.comment(wif, parentAuthor, parentPermlink, author, permlink, title, body, jsonMetadata, function(err, result) {
-  //console.log(err, result);
-  if (!err) {
-    console.log('comment', result);
-  }
-  else console.error(err);
-});
-```
-#### Example add a comment:
-```js
-/**
- * comment() add a comment
- * @param {Base58} wif - private posting key
- * @param {String} parentAuthor - for add a comment, author of the post
- * @param {String} parentPermlink - for add a comment, url-address of the post
- * @param {String} author - author of the comment
- * @param {String} permlink - unique url-address of the comment
- * @param {String} title - for create a comment, empty field
- * @param {String} body - text of the comment
- * @param {String} jsonMetadata - meta-data of the post (images etc.)
-*/
-var wif = '5K...';
-var parentAuthor = 'account1';
-var parentPermlink = 'test-url';
-var author = 'account1';
-var permlink = 're-' + parentAuthor + '-' + parentPermlink + '-' + Date.now(); // re-account1-test-url-1517333064308
-var title = '';
-var body = 'hi!';
+var title = 'title';
+var body = 'body';
 var jsonMetadata = '{}';
 amalgam.broadcast.comment(wif, parentAuthor, parentPermlink, author, permlink, title, body, jsonMetadata, function(err, result) {
   //console.log(err, result);
