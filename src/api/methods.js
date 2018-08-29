@@ -163,7 +163,7 @@ export default [
     {
       "api": "database_api",
       "method": "get_active_votes",
-      "params": ["author", "permlink"]
+      "params": ["permlink"]
     },
     {
       "api": "database_api",
@@ -173,22 +173,12 @@ export default [
     {
       "api": "database_api",
       "method": "get_content",
-      "params": ["author", "permlink"]
+      "params": ["permlink"]
     },
     {
       "api": "database_api",
       "method": "get_content_replies",
-      "params": ["author", "permlink"]
-    },
-    {
-      "api": "database_api",
-      "method": "get_discussions_by_author_before_date",
-      "params": ["author", "startPermlink", "beforeDate", "limit"]
-    },
-    {
-      "api": "database_api",
-      "method": "get_replies_by_last_update",
-      "params": ["startAuthor", "startPermlink", "limit"]
+      "params": ["permlink"]
     },
     {
       "api": "database_api",

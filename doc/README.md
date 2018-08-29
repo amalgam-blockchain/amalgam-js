@@ -300,7 +300,7 @@ amalgam.api.verifyAccountAuthority(nameOrId, signers, function(err, result) {
 
 ### Get Active Votes
 ```
-amalgam.api.getActiveVotes(author, permlink, function(err, result) {
+amalgam.api.getActiveVotes(permlink, function(err, result) {
   console.log(err, result);
 });
 ```
@@ -316,61 +316,13 @@ amalgam.api.getAccountVotes(voter, function(err, result) {
 
 ### Get Content
 ```
-amalgam.api.getContent(author, permlink, function(err, result) {
+amalgam.api.getContent(permlink, function(err, result) {
   console.log(err, result);
-});
-```
-#### Example:
-```js
-/**
- * getContent() receiving a post
- * @param {String} author - author of the post
- * @param {String} permlink - url-address of the post
-*/
-var author = 'account1';
-var permlink = 'test-url';
-amalgam.api.getContent(author, permlink, function(err, result) {
-  //console.log(err, result);
-  if (!err) {
-    console.log('getContent', result.title);
-  }
-  else console.error(err);
 });
 ```
 ### Get Content Replies
 ```
-amalgam.api.getContentReplies(parent, parentPermlink, function(err, result) {
-  console.log(err, result);
-});
-```
-#### Example:
-```js
-/**
- * getContentReplies() receiving a comments
- * @param {String} parent - author of the post
- * @param {String} parentPermlink - url-address of the post
-*/
-var parent = 'account1';
-var parentPermlink = 'test-url';
-amalgam.api.getContentReplies(parent, parentPermlink, function(err, result) {
-  //console.log(err, result);
-  if (!err) {
-    result.forEach(function(item) {
-      console.log('getContentReplies', item.body);
-    });
-  }
-  else console.error(err);
-});
-```
-### Get Discussions By Author Before Date
-```
-amalgam.api.getDiscussionsByAuthorBeforeDate(author, startPermlink, beforeDate, limit, function(err, result) {
-  console.log(err, result);
-});
-```
-### Get Replies By Last Update
-```
-amalgam.api.getRepliesByLastUpdate(startAuthor, startPermlink, limit, function(err, result) {
+amalgam.api.getContentReplies(parentPermlink, function(err, result) {
   console.log(err, result);
 });
 ```
@@ -578,32 +530,28 @@ amalgam.broadcast.changeRecoveryAccount(wif, accountToRecover, newRecoveryAccoun
 ```
 ### Comment
 ```
-amalgam.broadcast.comment(wif, parentAuthor, parentPermlink, author, permlink, title, body, jsonMetadata, function(err, result) {
+amalgam.broadcast.comment(wif, parentAuthor, parentPermlink, author, permlink, jsonMetadata, function(err, result) {
   console.log(err, result);
 });
 ```
-#### Example add a post:
+#### Example add a reflection:
 ```js
 /**
  * comment() add a post
  * @param {Base58} wif - private posting key
- * @param {String} parentAuthor - for add a post, empty field
- * @param {String} parentPermlink - main tag
+ * @param {String} parentAuthor - to add a post, empty field
+ * @param {String} parentPermlink - to add a post, empty field
  * @param {String} author - author of the post
- * @param {String} permlink - url-address of the post
- * @param {String} title - header of the post
- * @param {String} body - text of the post
+ * @param {String} permlink - reflection ID
  * @param {String} jsonMetadata - meta-data of the post (images etc.)
 */
 var wif = '5K...';
 var parentAuthor = '';
-var parentPermlink = 'reflection';
+var parentPermlink = '';
 var author = 'account1';
-var permlink = 'test-url';
-var title = 'title';
-var body = 'body';
+var permlink = '...';
 var jsonMetadata = '{}';
-amalgam.broadcast.comment(wif, parentAuthor, parentPermlink, author, permlink, title, body, jsonMetadata, function(err, result) {
+amalgam.broadcast.comment(wif, parentAuthor, parentPermlink, author, permlink, jsonMetadata, function(err, result) {
   //console.log(err, result);
   if (!err) {
     console.log('comment', result);
@@ -966,25 +914,9 @@ console.log(password);
 // => 'GAz3GYFvvQvgm7t2fQmwMDuXEzDqTzn9'
 ```
 
-### Comment Permlink
-```
-var parentAuthor = 'account1';
-var parentPermlink = 'a-selfie';
-var commentPermlink = amalgam.formatter.commentPermlink(parentAuthor, parentPermlink);
-console.log(commentPermlink);
-// => 'a-selfie-20170621t080403765z'
-```
-
 ### Estimate Account Value
 ```
 var amalgamPower = amalgam.formatter.estimateAccountValue(account);
-```
-
-### Reputation
-```
-var reputation = amalgam.formatter.reputation(3512485230915);
-console.log(reputation);
-// => 56
 ```
 
 ### Vest To Amalgam

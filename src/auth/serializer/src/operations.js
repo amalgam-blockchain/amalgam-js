@@ -164,8 +164,6 @@ let comment = new Serializer(
     parent_permlink: string,
     author: string,
     permlink: string,
-    title: string,
-    body: string,
     json_metadata: string
 }
 );
