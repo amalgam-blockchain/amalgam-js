@@ -163,7 +163,7 @@ export default [
     {
       "api": "database_api",
       "method": "get_active_votes",
-      "params": ["permlink"]
+      "params": ["author", "permlink"]
     },
     {
       "api": "database_api",
@@ -173,12 +173,12 @@ export default [
     {
       "api": "database_api",
       "method": "get_content",
-      "params": ["permlink"]
+      "params": ["author", "permlink"]
     },
     {
       "api": "database_api",
       "method": "get_content_replies",
-      "params": ["permlink"]
+      "params": ["author", "permlink"]
     },
     {
       "api": "database_api",

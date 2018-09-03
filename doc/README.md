@@ -300,7 +300,7 @@ amalgam.api.verifyAccountAuthority(nameOrId, signers, function(err, result) {
 
 ### Get Active Votes
 ```
-amalgam.api.getActiveVotes(permlink, function(err, result) {
+amalgam.api.getActiveVotes(author, permlink, function(err, result) {
   console.log(err, result);
 });
 ```
@@ -316,13 +316,13 @@ amalgam.api.getAccountVotes(voter, function(err, result) {
 
 ### Get Content
 ```
-amalgam.api.getContent(permlink, function(err, result) {
+amalgam.api.getContent(author, permlink, function(err, result) {
   console.log(err, result);
 });
 ```
 ### Get Content Replies
 ```
-amalgam.api.getContentReplies(parentPermlink, function(err, result) {
+amalgam.api.getContentReplies(author, parentPermlink, function(err, result) {
   console.log(err, result);
 });
 ```
