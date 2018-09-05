@@ -35,13 +35,12 @@ amalgam.api.getAccounts(['account1', 'account2'], function(err, response){
 ```
 
 ## Config
-Default config should work with Amalgam. However you can change it to work with Amalgam
-as 
+Default config should work with Amalgam. However you can change it to work with local node as 
 ```js
-amalgam.config.set('websocket','wss://ws.amalgam.money'); // assuming websocket is at ws.amalgam.money
-amalgam.config.set('address_prefix','AML');
-amalgam.config.set('chain_id','46179a8f45db072e7848bf0a478446dd257dd5ad8e16069ad9852ea280f65591');
+amalgam.api.setOptions({ url: 'ws://127.0.0.1:8090' });
 ```
+Both WebSocket (ws/wss) and JSON-RPC (http/https) protocols are supported to connect to nodes.
+
 ### set
 ```
 amalgam.config.set('address_prefix','AML');

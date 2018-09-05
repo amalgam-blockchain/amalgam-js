@@ -1,334 +1,278 @@
 import EventEmitter from 'events';
 import Promise from 'bluebird';
-import cloneDeep from 'lodash/cloneDeep';
-import defaults from 'lodash/defaults';
-import isNode from 'detect-node';
-import newDebug from 'debug';
 import config from '../config';
 import methods from './methods';
+import transports from './transports';
 import { camelCase } from '../utils';
-
-const debugEmitters = newDebug('amalgam:emitters');
-const debugProtocol = newDebug('amalgam:protocol');
-const debugSetup = newDebug('amalgam:setup');
-const debugWs = newDebug('amalgam:ws');
-
-let WebSocket;
-if (isNode) {
-  WebSocket = require('ws'); // eslint-disable-line global-require
-} else if (typeof window !== 'undefined') {
-  WebSocket = window.WebSocket;
-} else {
-  throw new Error('Couldn\'t decide on a `WebSocket` class');
-}
-
-const DEFAULTS = {
-  id: 0,
-};
-
-const expectedResponseMs = process.env.EXPECTED_RESPONSE_MS || 2000;
+import { jsonRpc } from './transports/http';
 
 class Amalgam extends EventEmitter {
-  constructor(options = {}) {
-    super(options);
-    defaults(options, DEFAULTS);
-    this.options = cloneDeep(options);
-    this.id = 0;
-    this.inFlight = 0;
-    this.currentP = Promise.fulfilled();
-    this.isOpen = false;
-    this.releases = [];
-    this.requests = {};
-  }
+    constructor(options = {}) {
+        super(options);
+        this._setTransport(options);
+        this._setLogger(options);
+        this.options = options;
+        this.seqNo = 0; // used for rpc calls
+        methods.forEach(method => {
+            const methodName = method.method_name || camelCase(method.method);
+            const methodParams = method.params || [];
 
-  setWebSocket(url) {
-    console.warn("amalgam.api.setWebSocket(url) is now deprecated instead use amalgam.config.set('websocket',url)");
-    debugSetup('Setting WS', url);
-    config.set('websocket', url);
-    this.stop();
-  }
+            this[`${methodName}With`] = (options, callback) => {
+                return this.send(method.api, {
+                    method: method.method,
+                    params: methodParams.map(param => options[param])
+                }, callback);
+            };
 
-  start() {
-    if (this.startP) {
-      return this.startP;
-    }
+            this[methodName] = (...args) => {
+                const options = methodParams.reduce((memo, param, i) => {
+                    memo[param] = args[i]; // eslint-disable-line no-param-reassign
+                    return memo;
+                }, {});
+                const callback = args[methodParams.length];
+                return this[`${methodName}With`](options, callback);
+            };
 
-    const startP = new Promise((resolve, reject) => {
-      if (startP !== this.startP) return;
-      const url = config.get('websocket');
-      this.ws = new WebSocket(url);
-
-      const releaseOpen = this.listenTo(this.ws, 'open', () => {
-        debugWs('Opened WS connection with', url);
-        this.isOpen = true;
-        releaseOpen();
-        resolve();
-      });
-
-      const releaseClose = this.listenTo(this.ws, 'close', () => {
-        debugWs('Closed WS connection with', url);
-        this.isOpen = false;
-        delete this.ws;
-        this.stop();
-
-        if (startP.isPending()) {
-          reject(new Error('The WS connection was closed before this operation was made'));
-        }
-      });
-
-      const releaseMessage = this.listenTo(this.ws, 'message', (message) => {
-        debugWs('Received message', message.data);
-        const data = JSON.parse(message.data);
-        const id = data.id;
-        const request = this.requests[id];
-        if (!request) {
-          debugWs('Amalgam.onMessage error: unknown request ', id);
-          return;
-        }
-        delete this.requests[id];
-        this.onMessage(data, request);
-      });
-
-      this.releases = this.releases.concat([
-        releaseOpen,
-        releaseClose,
-        releaseMessage,
-      ]);
-    });
-
-    this.startP = startP;
-
-    return startP;
-  }
-
-  stop() {
-    debugSetup('Stopping...');
-    if (this.ws) this.ws.close();
-    delete this.startP;
-    delete this.ws;
-    this.releases.forEach((release) => release());
-    this.releases = [];
-  }
-
-  listenTo(target, eventName, callback) {
-    debugEmitters('Adding listener for', eventName, 'from', target.constructor.name);
-    if (target.addEventListener) target.addEventListener(eventName, callback);
-    else target.on(eventName, callback);
-
-    return () => {
-      debugEmitters('Removing listener for', eventName, 'from', target.constructor.name);
-      if (target.removeEventListener) target.removeEventListener(eventName, callback);
-      else target.removeListener(eventName, callback);
-    };
-  }
-
-  onMessage(message, request) {
-    const {api, data, resolve, reject, start_time} = request;
-    debugWs('-- Amalgam.onMessage -->', message.id);
-    const errorCause = message.error;
-    if (errorCause) {
-      const err = new Error(
-        // eslint-disable-next-line prefer-template
-        (errorCause.message || 'Failed to complete operation') +
-        ' (see err.payload for the full error payload)'
-      );
-      err.payload = message;
-      reject(err);
-      return;
-    }
-
-    debugProtocol('Resolved', api, data, '->', message);
-    this.emit('track-performance', data.method, Date.now() - start_time);
-    delete this.requests[message.id];
-    resolve(message.result);
-  }
-
-  send(api, data, callback) {
-    debugSetup('Amalgam::send', api, data);
-    const id = data.id || this.id++;
-    const startP = this.start();
-
-    this.currentP = startP
-    .then(() => new Promise((resolve, reject) => {
-        if (!this.ws) {
-          reject(new Error('The WS connection was closed while this request was pending'));
-          return;
-        }
-
-        const payload = JSON.stringify({
-          id,
-          method: 'call',
-          jsonrpc: '2.0',
-          params: [
-            api,
-            data.method,
-            data.params,
-          ],
+	    this[`${methodName}WithAsync`] = Promise.promisify(this[`${methodName}With`]);
+            this[`${methodName}Async`] = Promise.promisify(this[methodName]);
         });
+    }
 
-        debugWs('Sending message', payload);
-        this.requests[id] = {
-          api,
-          data,
-          resolve,
-          reject,
-          start_time: Date.now()
+    _setTransport(options) {
+        if (options.url && options.url.match('^((http|https)?:\/\/)')) {
+            options.uri = options.url;
+            options.transport = 'http';
+            this._transportType = options.transport;
+            this.options = options;
+            this.transport = new transports.http(options);
+        } else if (options.url && options.url.match('^((ws|wss)?:\/\/)')) {
+            options.websocket = options.url;
+            options.transport = 'ws';
+            this._transportType = options.transport;
+            this.options = options;
+            this.transport = new transports.ws(options);
+        } else if (options.transport) {
+            if (this.transport && this._transportType !== options.transport) {
+                this.transport.stop();
+            }
+
+            this._transportType = options.transport;
+
+            if (typeof options.transport === 'string') {
+                if (!transports[options.transport]) {
+                    throw new TypeError(
+                        'Invalid `transport`, valid values are `http`, `ws` or a class',
+                    );
+                }
+                this.transport = new transports[options.transport](options);
+            } else {
+                this.transport = new options.transport(options);
+            }
+        } else {
+            this.transport = new transports.ws(options);
+        }
+    }
+
+    _setLogger(options) {
+        if (options.hasOwnProperty('logger')) {
+            switch (typeof options.logger) {
+                case 'function':
+                    this.__logger = {
+                        log: options.logger
+                    };
+                    break;
+                case 'object':
+                    if (typeof options.logger.log !== 'function') {
+                        throw new Error('setOptions({logger:{}}) must have a property .log of type function')
+                    }
+                    this.__logger = options.logger;
+                    break;
+                case 'undefined':
+                    if (this.__logger) break;
+                default:
+                    this.__logger = false;
+            }
+        }
+    }
+
+    log(logLevel) {
+        if (this.__logger) {
+            if ((arguments.length > 1) && typeof this.__logger[logLevel] === 'function') {
+                let args = Array.prototype.slice.call(arguments, 1);
+                this.__logger[logLevel].apply(this.__logger, args);
+            } else {
+                this.__logger.log.apply(this.__logger, arguments);
+            }
+        }
+    }
+
+    start() {
+        return this.transport.start();
+    }
+
+    stop() {
+        return this.transport.stop();
+    }
+
+    send(api, data, callback) {
+        var cb = callback;
+        if (this.__logger) {
+            let id = Math.random();
+            let self = this;
+            this.log('xmit:' + id + ':', data)
+            cb = function(e, d) {
+                if (e) {
+                    self.log('error', 'rsp:' + id + ':\n\n', e, d)
+                } else {
+                    self.log('rsp:' + id + ':', d)
+                }
+                if (callback) {
+                    callback.apply(self, arguments)
+                }
+            }
+        }
+        return this.transport.send(api, data, cb);
+    }
+
+    setOptions(options) {
+        Object.assign(this.options, options);
+        this._setLogger(options);
+        this._setTransport(options);
+        this.transport.setOptions(options);
+    }
+
+    setWebSocket(url) {
+        this.setOptions({
+            websocket: url
+        });
+    }
+
+    setUri(url) {
+        this.setOptions({
+            uri: url
+        });
+    }
+
+    streamBlockNumber(mode = 'head', callback, ts = 200) {
+        if (typeof mode === 'function') {
+            callback = mode;
+            mode = 'head';
+        }
+        let current = '';
+        let running = true;
+
+        const update = () => {
+            if (!running) return;
+
+            this.getDynamicGlobalPropertiesAsync().then(
+                result => {
+                    const blockId = mode === 'irreversible' ?
+                        result.last_irreversible_block_num :
+                        result.head_block_number;
+
+                    if (blockId !== current) {
+                        if (current) {
+                            for (let i = current; i < blockId; i++) {
+                                if (i !== current) {
+                                    callback(null, i);
+                                }
+                                current = i;
+                            }
+                        } else {
+                            current = blockId;
+                            callback(null, blockId);
+                        }
+                    }
+
+                    Promise.delay(ts).then(() => {
+                        update();
+                    });
+                },
+                err => {
+                    callback(err);
+                },
+            );
         };
 
-        this.ws.send(payload);
-      }))
-      .nodeify(callback);
+        update();
 
-    return this.currentP;
-  }
-
-  streamBlockNumber(mode = 'head', callback, ts = 200) {
-    if (typeof mode === 'function') {
-      callback = mode;
-      mode = 'head';
+        return () => {
+            running = false;
+        };
     }
-    let current = '';
-    let running = true;
 
-    const update = () => {
-      if (!running) return;
+    streamBlock(mode = 'head', callback) {
+        if (typeof mode === 'function') {
+            callback = mode;
+            mode = 'head';
+        }
 
-      this.getDynamicGlobalPropertiesAsync()
-        .then((result) => {
-          const blockId = mode === 'irreversible'
-            ? result.last_irreversible_block_num
-            : result.head_block_number;
+        let current = '';
+        let last = '';
 
-          if (blockId !== current) {
-            if (current) {
-              for (let i = current; i < blockId; i++) {
-                if (i !== current) {
-                  callback(null, i);
-                }
-                current = i;
-              }
-            } else {
-              current = blockId;
-              callback(null, blockId);
+        const release = this.streamBlockNumber(mode, (err, id) => {
+            if (err) {
+                release();
+                callback(err);
+                return;
             }
-          }
 
-          Promise.delay(ts).then(() => {
-            update();
-          });
-        }, (err) => {
-          callback(err);
+            current = id;
+            if (current !== last) {
+                last = current;
+                this.getBlock(current, callback);
+            }
         });
-    };
 
-    update();
-
-    return () => {
-      running = false;
-    };
-  }
-
-  streamBlock(mode = 'head', callback) {
-    if (typeof mode === 'function') {
-      callback = mode;
-      mode = 'head';
+        return release;
     }
 
-    let current = '';
-    let last = '';
+    streamTransactions(mode = 'head', callback) {
+        if (typeof mode === 'function') {
+            callback = mode;
+            mode = 'head';
+        }
 
-    const release = this.streamBlockNumber(mode, (err, id) => {
-      if (err) {
-        release();
-        callback(err);
-        return;
-      }
+        const release = this.streamBlock(mode, (err, result) => {
+            if (err) {
+                release();
+                callback(err);
+                return;
+            }
 
-      current = id;
-      if (current !== last) {
-        last = current;
-        this.getBlock(current, callback);
-      }
-    });
-
-    return release;
-  }
-
-  streamTransactions(mode = 'head', callback) {
-    if (typeof mode === 'function') {
-      callback = mode;
-      mode = 'head';
-    }
-
-    const release = this.streamBlock(mode, (err, result) => {
-      if (err) {
-        release();
-        callback(err);
-        return;
-      }
-
-      if (result && result.transactions) {
-        result.transactions.forEach((transaction) => {
-          callback(null, transaction);
+            if (result && result.transactions) {
+                result.transactions.forEach(transaction => {
+                    callback(null, transaction);
+                });
+            }
         });
-      }
-    });
 
-    return release;
-  }
-
-  streamOperations(mode = 'head', callback) {
-    if (typeof mode === 'function') {
-      callback = mode;
-      mode = 'head';
+        return release;
     }
 
-    const release = this.streamTransactions(mode, (err, transaction) => {
-      if (err) {
-        release();
-        callback(err);
-        return;
-      }
+    streamOperations(mode = 'head', callback) {
+        if (typeof mode === 'function') {
+            callback = mode;
+            mode = 'head';
+        }
 
-      transaction.operations.forEach((operation) => {
-        callback(null, operation);
-      });
-    });
+        const release = this.streamTransactions(mode, (err, transaction) => {
+            if (err) {
+                release();
+                callback(err);
+                return;
+            }
 
-    return release;
-  }
+            transaction.operations.forEach(operation => {
+                callback(null, operation);
+            });
+        });
+
+        return release;
+    }
 }
 
-// Generate Methods from methods.js
-methods.forEach((method) => {
-  const methodName = method.method_name || camelCase(method.method);
-  const methodParams = method.params || [];
-
-  Amalgam.prototype[`${methodName}With`] =
-    function Amalgam$$specializedSendWith(options, callback) {
-      const params = methodParams.map((param) => options[param]);
-      return this.send(method.api, {
-        method: method.method,
-        params,
-      }, callback);
-    };
-
-  Amalgam.prototype[methodName] =
-    function Amalgam$specializedSend(...args) {
-      const options = methodParams.reduce((memo, param, i) => {
-        memo[param] = args[i]; // eslint-disable-line no-param-reassign
-        return memo;
-      }, {});
-      const callback = args[methodParams.length];
-
-      return this[`${methodName}With`](options, callback);
-    };
-});
-
-Promise.promisifyAll(Amalgam.prototype);
-
 // Export singleton instance
-const amalgam = new Amalgam();
+const amalgam = new Amalgam(config);
 exports = module.exports = amalgam;
 exports.Amalgam = Amalgam;
-exports.Amalgam.DEFAULTS = DEFAULTS;

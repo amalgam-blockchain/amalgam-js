@@ -27,8 +27,7 @@ https://cdn.jsdelivr.net/npm/amalgam-js/dist/amalgam.min.js<br/>
 
 ## Server
 
-## WebSockets
-wss://ws.amalgam.money by default<br/>
+https://api.amalgam.money By Default
 
 ## Examples
 ### Broadcast Vote
