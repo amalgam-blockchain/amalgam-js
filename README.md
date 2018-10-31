@@ -30,16 +30,6 @@ https://cdn.jsdelivr.net/npm/amalgam-js/dist/amalgam.min.js<br/>
 https://api.amalgam.money By Default
 
 ## Examples
-### Broadcast Vote
-```js
-var amalgam = require('amalgam');
-
-var wif = amalgam.auth.toWif(username, password, 'posting');
-amalgam.broadcast.vote(wif, voter, author, permlink, weight, function(err, result) {
-	console.log(err, result);
-});
-```
-
 ### Get Accounts
 ```js
 amalgam.api.getAccounts(['account1', 'account2'], function(err, result) {

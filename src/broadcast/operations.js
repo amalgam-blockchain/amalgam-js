@@ -1,26 +1,5 @@
 module.exports = [
   {
-    "roles": ["posting", "active", "owner"],
-    "operation": "vote",
-    "params": [
-      "voter",
-      "author",
-      "permlink",
-      "weight"
-    ]
-  },
-  {
-    "roles": ["posting", "active", "owner"],
-    "operation": "comment",
-    "params": [
-      "parent_author",
-      "parent_permlink",
-      "author",
-      "permlink",
-      "json_metadata"
-    ]
-  },
-  {
     "roles": ["active", "owner"],
     "operation": "transfer",
     "params": [
@@ -65,14 +44,6 @@ module.exports = [
     "params": [
       "owner",
       "orderid"
-    ]
-  },
-  {
-    "roles": ["active", "owner"],
-    "operation": "price",
-    "params": [
-      "base",
-      "quote"
     ]
   },
   {
@@ -148,29 +119,11 @@ module.exports = [
   },
   {
     "roles": ["active", "owner"],
-    "operation": "pow",
-    "params": [
-      "worker",
-      "input",
-      "signature",
-      "work"
-    ]
-  },
-  {
-    "roles": ["active", "owner"],
     "operation": "custom",
     "params": [
       "required_auths",
       "id",
       "data"
-    ]
-  },
-  {
-    "roles": ["posting", "active", "owner"],
-    "operation": "delete_comment",
-    "params": [
-      "author",
-      "permlink"
     ]
   },
   {
@@ -181,19 +134,6 @@ module.exports = [
       "required_posting_auths",
       "id",
       "json"
-    ]
-  },
-  {
-    "roles": ["posting", "active", "owner"],
-    "operation": "comment_options",
-    "params": [
-      "author",
-      "permlink",
-      "max_accepted_payout",
-      "percent_amalgam_dollars",
-      "allow_votes",
-      "allow_curation_rewards",
-      "extensions"
     ]
   },
   {
@@ -216,23 +156,6 @@ module.exports = [
       "exchange_rate",
       "fill_or_kill",
       "expiration"
-    ]
-  },
-  {
-    "roles": ["posting", "active", "owner"],
-    "operation": "challenge_authority",
-    "params": [
-      "challenger",
-      "challenged",
-      "require_owner"
-    ]
-  },
-  {
-    "roles": ["active", "owner"],
-    "operation": "prove_authority",
-    "params": [
-      "challenged",
-      "require_owner"
     ]
   },
   {
@@ -307,14 +230,6 @@ module.exports = [
   },
   {
     "roles": ["active", "owner"],
-    "operation": "pow2",
-    "params": [
-      "input",
-      "pow_summary"
-    ]
-  },
-  {
-    "roles": ["active", "owner"],
     "operation": "escrow_approve",
     "params": [
       "from",
@@ -372,34 +287,6 @@ module.exports = [
   },
   {
     "roles": ["active", "owner"],
-    "operation": "reset_account",
-    "params": [
-      "reset_account",
-      "account_to_reset",
-      "new_owner_authority"
-    ]
-  },
-  {
-    "roles": ["owner", "posting"],
-    "operation": "set_reset_account",
-    "params": [
-      "account",
-      "current_reset_account",
-      "reset_account"
-    ]
-  },
-  {
-    "roles": ["posting", "active", "owner"],
-    "operation": "claim_reward_balance",
-    "params": [
-      "account",
-      "reward_amalgam",
-      "reward_abd",
-      "reward_vests"
-    ]
-  },
-  {
-    "roles": ["active", "owner"],
     "operation": "delegate_vesting_shares",
     "params": [
       "delegator",
@@ -409,86 +296,72 @@ module.exports = [
   },
   {
     "roles": ["active", "owner"],
-    "operation": "account_create_with_delegation",
+    "operation": "tbd1",
     "params": [
-      "fee",
-      "delegation",
-      "creator",
-      "new_account_name",
-      "owner",
-      "active",
-      "posting",
-      "memo_key",
-      "json_metadata",
-      "extensions"
+      "from"
     ]
   },
   {
     "roles": ["active", "owner"],
-    "operation": "fill_convert_request",
+    "operation": "tbd2",
     "params": [
-      "owner",
-      "requestid",
-      "amount_in",
-      "amount_out"
-    ]
-  },
-  {
-    "roles": ["posting", "active", "owner"],
-    "operation": "comment_reward",
-    "params": [
-      "author",
-      "permlink",
-      "payout"
+      "from"
     ]
   },
   {
     "roles": ["active", "owner"],
-    "operation": "liquidity_reward",
+    "operation": "tbd3",
     "params": [
-      "owner",
-      "payout"
+      "from"
     ]
   },
   {
     "roles": ["active", "owner"],
-    "operation": "interest",
+    "operation": "tbd4",
     "params": [
-      "owner",
-      "interest"
+      "from"
     ]
   },
   {
     "roles": ["active", "owner"],
-    "operation": "fill_vesting_withdraw",
+    "operation": "tbd5",
     "params": [
-      "from_account",
-      "to_account",
-      "withdrawn",
-      "deposited"
+      "from"
     ]
   },
   {
-    "roles": ["posting", "active", "owner"],
-    "operation": "fill_order",
+    "roles": ["active", "owner"],
+    "operation": "tbd6",
     "params": [
-      "current_owner",
-      "current_orderid",
-      "current_pays",
-      "open_owner",
-      "open_orderid",
-      "open_pays"
+      "from"
     ]
   },
   {
-    "roles": ["posting", "active", "owner"],
-    "operation": "fill_transfer_from_savings",
+    "roles": ["active", "owner"],
+    "operation": "tbd7",
     "params": [
-      "from",
-      "to",
-      "amount",
-      "request_id",
-      "memo"
+      "from"
+    ]
+  },
+  {
+    "roles": ["active", "owner"],
+    "operation": "tbd8",
+    "params": [
+      "from"
+    ]
+  },
+  {
+    "roles": ["active", "owner"],
+    "operation": "tbd9",
+    "params": [
+      "from"
+    ]
+  },
+  {
+    "roles": ["active", "owner"],
+    "operation": "tbd10",
+    "params": [
+      "from"
     ]
   }
 ];

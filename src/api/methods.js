@@ -127,11 +127,6 @@ export default [
     },
     {
       "api": "database_api",
-      "method": "get_liquidity_queue",
-      "params": ["startAccount", "limit"]
-    },
-    {
-      "api": "database_api",
       "method": "get_transaction_hex",
       "params": ["trx"]
     },
@@ -162,26 +157,6 @@ export default [
     },
     {
       "api": "database_api",
-      "method": "get_active_votes",
-      "params": ["author", "permlink"]
-    },
-    {
-      "api": "database_api",
-      "method": "get_account_votes",
-      "params": ["voter"]
-    },
-    {
-      "api": "database_api",
-      "method": "get_content",
-      "params": ["author", "permlink"]
-    },
-    {
-      "api": "database_api",
-      "method": "get_content_replies",
-      "params": ["author", "permlink"]
-    },
-    {
-      "api": "database_api",
       "method": "get_witnesses",
       "params": ["witnessIds"]
     },
@@ -207,15 +182,6 @@ export default [
     {
       "api": "database_api",
       "method": "get_active_witnesses"
-    },
-    {
-      "api": "database_api",
-      "method": "get_miner_queue"
-    },
-    {
-      "api": "database_api",
-      "method": "get_reward_fund",
-      "params": ["name"]
     },
     {
       "api": "database_api",

@@ -60,15 +60,6 @@ const Serializer=function(operation_name, serilization_types_object){
     return module.exports[operation_name] = s;
 }
 
-const beneficiaries = new Serializer("beneficiaries", {
-  account: string,
-  weight: uint16
-});
-
-const comment_payout_beneficiaries = new Serializer(0, {
-  beneficiaries: set(beneficiaries)
-});
-
 // Custom-types after Generated code
 
 // ##  Generated code follows
@@ -146,25 +137,6 @@ let signed_block_header = new Serializer(
         hardfork_version_vote
     ])),
     witness_signature: bytes(65)
-}
-);
-
-let vote = new Serializer( 
-    "vote", {
-    voter: string,
-    author: string,
-    permlink: string,
-    weight: int16
-}
-);
-
-let comment = new Serializer( 
-    "comment", {
-    parent_author: string,
-    parent_permlink: string,
-    author: string,
-    permlink: string,
-    json_metadata: string
 }
 );
 
@@ -297,35 +269,11 @@ let account_witness_proxy = new Serializer(
 }
 );
 
-let pow = new Serializer( 
-    "pow", {
-    worker: public_key,
-    input: bytes(32),
-    signature: bytes(65),
-    work: bytes(32)
-}
-);
-
 let custom = new Serializer( 
     "custom", {
     required_auths: set(string),
     id: uint16,
     data: bytes()
-}
-);
-
-let report_over_production = new Serializer( 
-    "report_over_production", {
-    reporter: string,
-    first_block: signed_block_header,
-    second_block: signed_block_header
-}
-);
-
-let delete_comment = new Serializer( 
-    "delete_comment", {
-    author: string,
-    permlink: string
 }
 );
 
@@ -335,20 +283,6 @@ let custom_json = new Serializer(
     required_posting_auths: set(string),
     id: string,
     json: string
-}
-);
-
-let comment_options = new Serializer( 
-    "comment_options", {
-    author: string,
-    permlink: string,
-    max_accepted_payout: asset,
-    percent_amalgam_dollars: uint16,
-    allow_votes: bool,
-    allow_curation_rewards: bool,
-    extensions: set(static_variant([
-        comment_payout_beneficiaries
-    ]))
 }
 );
 
@@ -369,21 +303,6 @@ let limit_order_create2 = new Serializer(
     exchange_rate: price,
     fill_or_kill: bool,
     expiration: time_point_sec
-}
-);
-
-let challenge_authority = new Serializer( 
-    "challenge_authority", {
-    challenger: string,
-    challenged: string,
-    require_owner: bool
-}
-);
-
-let prove_authority = new Serializer( 
-    "prove_authority", {
-    challenged: string,
-    require_owner: bool
 }
 );
 
@@ -451,39 +370,6 @@ let escrow_release = new Serializer(
 }
 );
 
-let pow2_input = new Serializer( 
-    "pow2_input", {
-    worker_account: string,
-    prev_block: bytes(20),
-    nonce: uint64
-}
-);
-
-let pow2 = new Serializer( 
-    "pow2", {
-    input: pow2_input,
-    pow_summary: uint32
-}
-);
-
-let equihash_proof = new Serializer( 
-    "equihash_proof", {
-    n: uint32,
-    k: uint32,
-    seed: bytes(32),
-    inputs: array(uint32)
-}
-);
-
-let equihash_pow = new Serializer( 
-    "equihash_pow", {
-    input: pow2_input,
-    proof: equihash_proof,
-    prev_block: bytes(20),
-    pow_summary: uint32
-}
-);
-
 let escrow_approve = new Serializer( 
     "escrow_approve", {
     from: string,
@@ -539,51 +425,11 @@ let decline_voting_rights = new Serializer(
 }
 );
 
-let reset_account = new Serializer( 
-    "reset_account", {
-    reset_account: string,
-    account_to_reset: string,
-    new_owner_authority: authority
-}
-);
-
-let set_reset_account = new Serializer( 
-    "set_reset_account", {
-    account: string,
-    current_reset_account: string,
-    reset_account: string
-}
-);
-
-let claim_reward_balance = new Serializer( 
-    "claim_reward_balance", {
-    account: string,
-    reward_amalgam: asset,
-    reward_abd: asset,
-    reward_vests: asset
-}
-);
-
 let delegate_vesting_shares = new Serializer( 
     "delegate_vesting_shares", {
     delegator: string,
     delegatee: string,
     vesting_shares: asset
-}
-);
-
-let account_create_with_delegation = new Serializer( 
-    "account_create_with_delegation", {
-    fee: asset,
-    delegation: asset,
-    creator: string,
-    new_account_name: string,
-    owner: authority,
-    active: authority,
-    posting: authority,
-    memo_key: public_key,
-    json_metadata: string,
-    extensions: set(future_extensions)
 }
 );
 
@@ -593,40 +439,6 @@ let fill_convert_request = new Serializer(
     requestid: uint32,
     amount_in: asset,
     amount_out: asset
-}
-);
-
-let author_reward = new Serializer( 
-    "author_reward", {
-    author: string,
-    permlink: string,
-    abd_payout: asset,
-    amalgam_payout: asset,
-    vesting_payout: asset
-}
-);
-
-let curation_reward = new Serializer( 
-    "curation_reward", {
-    curator: string,
-    reward: asset,
-    comment_author: string,
-    comment_permlink: string
-}
-);
-
-let comment_reward = new Serializer( 
-    "comment_reward", {
-    author: string,
-    permlink: string,
-    payout: asset
-}
-);
-
-let liquidity_reward = new Serializer( 
-    "liquidity_reward", {
-    owner: string,
-    payout: asset
 }
 );
 
@@ -677,13 +489,6 @@ let hardfork = new Serializer(
     {hardfork_id: uint32}
 );
 
-let comment_payout_update = new Serializer( 
-    "comment_payout_update", {
-    author: string,
-    permlink: string
-}
-);
-
 let return_vesting_delegation = new Serializer( 
     "return_vesting_delegation", {
     account: string,
@@ -691,18 +496,14 @@ let return_vesting_delegation = new Serializer(
 }
 );
 
-let comment_benefactor_reward = new Serializer( 
-    "comment_benefactor_reward", {
-    benefactor: string,
-    author: string,
-    permlink: string,
-    reward: asset
+let producer_reward = new Serializer( 
+    "producer_reward", {
+    producer: string,
+    vesting_shares: asset
 }
 );
 
 operation.st_operations = [
-    vote,    
-    comment,    
     transfer,    
     transfer_to_vesting,    
     withdraw_vesting,    
@@ -715,48 +516,32 @@ operation.st_operations = [
     witness_update,    
     account_witness_vote,    
     account_witness_proxy,    
-    pow,    
     custom,    
-    report_over_production,    
-    delete_comment,    
     custom_json,    
-    comment_options,    
     set_withdraw_vesting_route,    
     limit_order_create2,    
-    challenge_authority,    
-    prove_authority,    
     request_account_recovery,    
     recover_account,    
     change_recovery_account,    
     escrow_transfer,    
     escrow_dispute,    
     escrow_release,    
-    pow2,    
     escrow_approve,    
     transfer_to_savings,    
     transfer_from_savings,    
     cancel_transfer_from_savings,    
     custom_binary,    
     decline_voting_rights,    
-    reset_account,    
-    set_reset_account,    
-    claim_reward_balance,    
     delegate_vesting_shares,    
-    account_create_with_delegation,    
     fill_convert_request,    
-    author_reward,    
-    curation_reward,    
-    comment_reward,    
-    liquidity_reward,    
     interest,    
     fill_vesting_withdraw,    
     fill_order,    
     shutdown_witness,    
     fill_transfer_from_savings,    
     hardfork,    
-    comment_payout_update,    
     return_vesting_delegation,    
-    comment_benefactor_reward
+    producer_reward
 ];
 
 let transaction = new Serializer( 

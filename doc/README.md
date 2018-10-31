@@ -10,14 +10,13 @@
     - [Accounts](#accounts)
     - [Market](#market)
     - [Authority / validation](#authority--validation)
-    - [Votes](#votes)
-    - [Content](#content)
     - [Witnesses](#witnesses)
 - [Login API](#login)
 - [Broadcast API](#broadcast-api)
 - [Broadcast](#broadcast)
 - [Auth](#auth)
 - [Formatter](#formatter)
+- [Utils](#utils)
 
 # Install
 ```
@@ -249,12 +248,6 @@ amalgam.api.getOpenOrders(owner, function(err, result) {
   console.log(err, result);
 });
 ```
-### Get Liquidity Queue
-```
-amalgam.api.getLiquidityQueue(startAccount, limit, function(err, result) {
-  console.log(err, result);
-});
-```
 
 ## Authority / validation
 
@@ -295,39 +288,7 @@ amalgam.api.verifyAccountAuthority(nameOrId, signers, function(err, result) {
 });
 ```
 
-## Votes
-
-### Get Active Votes
-```
-amalgam.api.getActiveVotes(author, permlink, function(err, result) {
-  console.log(err, result);
-});
-```
-### Get Account Votes
-```
-amalgam.api.getAccountVotes(voter, function(err, result) {
-  console.log(err, result);
-});
-```
-
-## Content
-
-
-### Get Content
-```
-amalgam.api.getContent(author, permlink, function(err, result) {
-  console.log(err, result);
-});
-```
-### Get Content Replies
-```
-amalgam.api.getContentReplies(author, parentPermlink, function(err, result) {
-  console.log(err, result);
-});
-```
-
 ## Witnesses
-
 
 ### Get Witnesses
 ```
@@ -362,12 +323,6 @@ amalgam.api.getWitnessCount(function(err, result) {
 ### Get Active Witnesses
 ```
 amalgam.api.getActiveWitnesses(function(err, result) {
-  console.log(err, result);
-});
-```
-### Get Miner Queue
-```
-amalgam.api.getMinerQueue(function(err, result) {
   console.log(err, result);
 });
 ```
@@ -485,12 +440,6 @@ amalgam.broadcast.accountCreate(wif, fee, creator, newAccountName, owner, active
   else console.error(err);
 });
 ```
-### Account Create With Delegation
-```
-amalgam.broadcast.accountCreateWithDelegation(wif, fee, delegation, creator, newAccountName, owner, active, posting, memoKey, jsonMetadata, extensions, function(err, result) {
-  console.log(err, result);
-});
-```
 ### Delegate Vesting Shares
 ```
 amalgam.broadcast.delegateVestingShares(wif, delegator, delegatee, vesting_shares, function(err, result) {
@@ -515,58 +464,9 @@ amalgam.broadcast.accountWitnessVote(wif, account, witness, approve, function(er
   console.log(err, result);
 });
 ```
-### Challenge Authority
-```
-amalgam.broadcast.challengeAuthority(wif, challenger, challenged, requireOwner, function(err, result) {
-  console.log(err, result);
-});
-```
 ### Change Recovery Account
 ```
 amalgam.broadcast.changeRecoveryAccount(wif, accountToRecover, newRecoveryAccount, extensions, function(err, result) {
-  console.log(err, result);
-});
-```
-### Comment
-```
-amalgam.broadcast.comment(wif, parentAuthor, parentPermlink, author, permlink, jsonMetadata, function(err, result) {
-  console.log(err, result);
-});
-```
-#### Example add a reflection:
-```js
-/**
- * comment() add a post
- * @param {Base58} wif - private posting key
- * @param {String} parentAuthor - to add a post, empty field
- * @param {String} parentPermlink - to add a post, empty field
- * @param {String} author - author of the post
- * @param {String} permlink - reflection ID
- * @param {String} jsonMetadata - meta-data of the post (images etc.)
-*/
-var wif = '5K...';
-var parentAuthor = '';
-var parentPermlink = '';
-var author = 'account1';
-var permlink = '...';
-var jsonMetadata = '{}';
-amalgam.broadcast.comment(wif, parentAuthor, parentPermlink, author, permlink, jsonMetadata, function(err, result) {
-  //console.log(err, result);
-  if (!err) {
-    console.log('comment', result);
-  }
-  else console.error(err);
-});
-```
-### Comment Options
-```
-amalgam.broadcast.commentOptions(wif, author, permlink, maxAcceptedPayout, percentAmalgamDollars, allowVotes, allowCurationRewards, extensions, function(err, result) {
-  console.log(err, result);
-});
-```
-### Comment Reward
-```
-amalgam.broadcast.commentReward(wif, author, permlink, abdPayout, vestingPayout, function(err, result) {
   console.log(err, result);
 });
 ```
@@ -594,12 +494,6 @@ amalgam.broadcast.customJson(wif, requiredAuths, requiredPostingAuths, id, json,
   console.log(err, result);
 });
 ```
-### Delete Comment
-```
-amalgam.broadcast.deleteComment(wif, author, permlink, function(err, result) {
-  console.log(err, result);
-});
-```
 ### Escrow Dispute
 ```
 amalgam.broadcast.escrowDispute(wif, from, to, agent, who, escrowId, function(err, result) {
@@ -624,36 +518,6 @@ amalgam.broadcast.feedPublish(wif, publisher, exchangeRate, function(err, result
   console.log(err, result);
 });
 ```
-### Pow2
-```
-amalgam.broadcast.pow2(wif, work, newOwnerKey, props, function(err, result) {
-  console.log(err, result);
-});
-```
-### Fill Convert Request
-```
-amalgam.broadcast.fillConvertRequest(wif, owner, requestid, amountIn, amountOut, function(err, result) {
-  console.log(err, result);
-});
-```
-### Fill Order
-```
-amalgam.broadcast.fillOrder(wif, currentOwner, currentOrderid, currentPays, openOwner, openOrderid, openPays, function(err, result) {
-  console.log(err, result);
-});
-```
-### Fill Vesting Withdraw
-```
-amalgam.broadcast.fillVestingWithdraw(wif, fromAccount, toAccount, withdrawn, deposited, function(err, result) {
-  console.log(err, result);
-});
-```
-### Interest
-```
-amalgam.broadcast.interest(wif, owner, interest, function(err, result) {
-  console.log(err, result);
-});
-```
 ### Limit Order Cancel
 ```
 amalgam.broadcast.limitOrderCancel(wif, owner, orderid, function(err, result) {
@@ -669,24 +533,6 @@ amalgam.broadcast.limitOrderCreate(wif, owner, orderid, amountToSell, minToRecei
 ### Limit Order Create2
 ```
 amalgam.broadcast.limitOrderCreate2(wif, owner, orderid, amountToSell, exchangeRate, fillOrKill, expiration, function(err, result) {
-  console.log(err, result);
-});
-```
-### Liquidity Reward
-```
-amalgam.broadcast.liquidityReward(wif, owner, payout, function(err, result) {
-  console.log(err, result);
-});
-```
-### Pow
-```
-amalgam.broadcast.pow(wif, worker, input, signature, work, function(err, result) {
-  console.log(err, result);
-});
-```
-### Prove Authority
-```
-amalgam.broadcast.proveAuthority(wif, challenged, requireOwner, function(err, result) {
   console.log(err, result);
 });
 ```
@@ -749,12 +595,6 @@ amalgam.broadcast.transferToVesting(wif, from, to, amount, function(err, result)
   console.log(err, result);
 });
 ```
-### Vote
-```
-amalgam.broadcast.vote(wif, voter, author, permlink, weight, function(err, result) {
-  console.log(err, result);
-});
-```
 ### Withdraw Vesting
 ```
 amalgam.broadcast.withdrawVesting(wif, account, vestingShares, function(err, result) {
@@ -764,24 +604,6 @@ amalgam.broadcast.withdrawVesting(wif, account, vestingShares, function(err, res
 ### Witness Update
 ```
 amalgam.broadcast.witnessUpdate(wif, owner, url, blockSigningKey, props, fee, function(err, result) {
-  console.log(err, result);
-});
-```
-### Fill Vesting Withdraw
-```
-amalgam.broadcast.fillVestingWithdraw(wif, fromAccount, toAccount, withdrawn, deposited, function(err, result) {
-  console.log(err, result);
-});
-```
-### Fill Order
-```
-amalgam.broadcast.fillOrder(wif, currentOwner, currentOrderid, currentPays, openOwner, openOrderid, openPays, function(err, result) {
-  console.log(err, result);
-});
-```
-### Fill Transfer From Savings
-```
-amalgam.broadcast.fillTransferFromSavings(wif, from, to, amount, requestId, memo, function(err, result) {
   console.log(err, result);
 });
 ```
