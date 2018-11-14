@@ -2,21 +2,30 @@ export default [
     {
       "api": "database_api",
       "method": "get_block_header",
-      "params": ["blockNum"]
+      "params": ["block_num"]
     },
     {
       "api": "database_api",
       "method": "get_block",
-      "params": ["blockNum"]
+      "params": ["block_num"]
     },
     {
       "api": "database_api",
       "method": "get_ops_in_block",
-      "params": ["blockNum", "onlyVirtual"]
+      "params": ["block_num", "only_virtual"]
+    },
+    {
+      "api": "database_api",
+      "method": "get_transaction",
+      "params": ["id"]
     },
     {
       "api": "database_api",
       "method": "get_config"
+    },
+    {
+      "api": "database_api",
+      "method": "get_version"
     },
     {
       "api": "database_api",
@@ -28,102 +37,167 @@ export default [
     },
     {
       "api": "database_api",
-      "method": "get_feed_history"
-    },
-    {
-      "api": "database_api",
-      "method": "get_current_median_history_price"
-    },
-    {
-      "api": "database_api",
       "method": "get_witness_schedule"
     },
     {
       "api": "database_api",
-      "method": "get_hardfork_version"
+      "method": "get_reserve_ratio"
     },
     {
       "api": "database_api",
-      "method": "get_next_scheduled_hardfork"
-    },
-    {
-      "api": "account_by_key_api",
-      "method": "get_key_references",
-      "params": ["key"]
+      "method": "get_hardfork_properties"
     },
     {
       "api": "database_api",
-      "method": "get_accounts",
-      "params": ["names"]
+      "method": "get_current_price_feed"
     },
     {
       "api": "database_api",
-      "method": "lookup_account_names",
-      "params": ["accountNames"]
+      "method": "get_feed_history"
     },
     {
       "api": "database_api",
-      "method": "lookup_accounts",
-      "params": ["lowerBoundName", "limit"]
+      "method": "list_witnesses",
+      "params": ["start", "limit", "order"]
     },
     {
       "api": "database_api",
-      "method": "get_account_count"
+      "method": "find_witnesses",
+      "params": ["owners"]
     },
     {
       "api": "database_api",
-      "method": "get_conversion_requests",
-      "params": ["accountName"]
+      "method": "get_active_witnesses"
+    },
+    {
+      "api": "database_api",
+      "method": "list_accounts",
+      "params": ["start", "limit", "order"]
+    },
+    {
+      "api": "database_api",
+      "method": "find_accounts",
+      "params": ["accounts"]
     },
     {
       "api": "database_api",
       "method": "get_account_history",
-      "params": ["account", "from", "limit"]
-    },
-    {
-      "api": "database_api",
-      "method": "get_owner_history",
-      "params": ["account"]
-    },
-    {
-      "api": "database_api",
-      "method": "get_recovery_request",
-      "params": ["account"]
-    },
-    {
-      "api": "database_api",
-      "method": "get_escrow",
-      "params": ["from", "escrowId"]
-    },
-    {
-      "api": "database_api",
-      "method": "get_withdraw_routes",
-      "params": ["account", "withdrawRouteType"]
+      "params": ["account", "start", "limit"]
     },
     {
       "api": "database_api",
       "method": "get_account_bandwidth",
-      "params": ["account", "bandwidthType"]
+      "params": ["account", "type"]
     },
     {
       "api": "database_api",
-      "method": "get_savings_withdraw_from",
-      "params": ["account"]
+      "method": "list_owner_histories",
+      "params": ["start", "limit"]
     },
     {
       "api": "database_api",
-      "method": "get_savings_withdraw_to",
-      "params": ["account"]
+      "method": "find_owner_histories",
+      "params": ["owner_auths"]
     },
     {
       "api": "database_api",
-      "method": "get_order_book",
-      "params": ["limit"]
+      "method": "list_account_recovery_requests",
+      "params": ["start", "limit", "order"]
     },
     {
       "api": "database_api",
-      "method": "get_open_orders",
-      "params": ["owner"]
+      "method": "find_account_recovery_requests",
+      "params": ["accounts"]
+    },
+    {
+      "api": "database_api",
+      "method": "list_change_recovery_account_requests",
+      "params": ["start", "limit", "order"]
+    },
+    {
+      "api": "database_api",
+      "method": "find_change_recovery_account_requests",
+      "params": ["requests"]
+    },
+    {
+      "api": "database_api",
+      "method": "list_escrows",
+      "params": ["start", "limit", "order"]
+    },
+    {
+      "api": "database_api",
+      "method": "find_escrows",
+      "params": ["escrows"]
+    },
+    {
+      "api": "database_api",
+      "method": "list_withdraw_vesting_routes",
+      "params": ["start", "limit", "order"]
+    },
+    {
+      "api": "database_api",
+      "method": "find_withdraw_vesting_routes",
+      "params": ["routes"]
+    },
+    {
+      "api": "database_api",
+      "method": "list_savings_withdrawals",
+      "params": ["start", "limit", "order"]
+    },
+    {
+      "api": "database_api",
+      "method": "find_savings_withdrawals",
+      "params": ["withdrawals"]
+    },
+    {
+      "api": "database_api",
+      "method": "list_vesting_delegations",
+      "params": ["start", "limit", "order"]
+    },
+    {
+      "api": "database_api",
+      "method": "find_vesting_delegations",
+      "params": ["delegations"]
+    },
+    {
+      "api": "database_api",
+      "method": "list_vesting_delegation_expirations",
+      "params": ["start", "limit", "order"]
+    },
+    {
+      "api": "database_api",
+      "method": "find_vesting_delegation_expirations",
+      "params": ["delegations"]
+    },
+    {
+      "api": "database_api",
+      "method": "list_abd_conversion_requests",
+      "params": ["start", "limit", "order"]
+    },
+    {
+      "api": "database_api",
+      "method": "find_abd_conversion_requests",
+      "params": ["requests"]
+    },
+    {
+      "api": "database_api",
+      "method": "list_decline_voting_rights_requests",
+      "params": ["start", "limit", "order"]
+    },
+    {
+      "api": "database_api",
+      "method": "find_decline_voting_rights_requests",
+      "params": ["requests"]
+    },
+    {
+      "api": "database_api",
+      "method": "list_limit_orders",
+      "params": ["start", "limit", "order"]
+    },
+    {
+      "api": "database_api",
+      "method": "find_limit_orders",
+      "params": ["orders"]
     },
     {
       "api": "database_api",
@@ -132,13 +206,8 @@ export default [
     },
     {
       "api": "database_api",
-      "method": "get_transaction",
-      "params": ["trxId"]
-    },
-    {
-      "api": "database_api",
       "method": "get_required_signatures",
-      "params": ["trx", "availableKeys"]
+      "params": ["trx", "available_keys"]
     },
     {
       "api": "database_api",
@@ -153,64 +222,22 @@ export default [
     {
       "api": "database_api",
       "method": "verify_account_authority",
-      "params": ["nameOrId", "signers"]
+      "params": ["account", "signers"]
     },
     {
       "api": "database_api",
-      "method": "get_witnesses",
-      "params": ["witnessIds"]
+      "method": "verify_signatures",
+      "params": ["hash", "signatures", "required_owner", "required_active", "required_posting", "required_other"]
     },
     {
-      "api": "database_api",
-      "method": "get_witness_by_account",
-      "params": ["accountName"]
-    },
-    {
-      "api": "database_api",
-      "method": "get_witnesses_by_vote",
-      "params": ["from", "limit"]
-    },
-    {
-      "api": "database_api",
-      "method": "lookup_witness_accounts",
-      "params": ["lowerBoundName", "limit"]
-    },
-    {
-      "api": "database_api",
-      "method": "get_witness_count"
-    },
-    {
-      "api": "database_api",
-      "method": "get_active_witnesses"
-    },
-    {
-      "api": "database_api",
-      "method": "get_vesting_delegations",
-      "params": ["account", "from", "limit"]
-    },
-    {
-      "api": "login_api",
-      "method": "login",
-      "params": ["username", "password"]
-    },
-    {
-      "api": "login_api",
-      "method": "get_api_by_name",
-      "params": ["database_api"]
-    },
-    {
-      "api": "login_api",
-      "method": "get_version"
+      "api": "account_by_key_api",
+      "method": "get_key_references",
+      "params": ["key"]
     },
     {
       "api": "network_broadcast_api",
       "method": "broadcast_transaction",
       "params": ["trx"]
-    },
-    {
-      "api": "network_broadcast_api",
-      "method": "broadcast_transaction_with_callback",
-      "params": ["confirmationCallback", "trx"]
     },
     {
       "api": "network_broadcast_api",
@@ -220,27 +247,19 @@ export default [
     {
       "api": "network_broadcast_api",
       "method": "broadcast_block",
-      "params": ["b"]
-    },
-    {
-      "api": "network_broadcast_api",
-      "method": "set_max_block_age",
-      "params": ["maxBlockAge"]
+      "params": ["block"]
     },
     {
       "api": "market_history_api",
-      "method": "get_ticker",
-      "params": []
+      "method": "get_ticker"
     },
     {
       "api": "market_history_api",
-      "method": "get_volume",
-      "params": []
+      "method": "get_volume"
     },
     {
       "api": "market_history_api",
       "method": "get_order_book",
-      "method_name": "getMarketOrderBook",
       "params": ["limit"]
     },
     {
@@ -260,7 +279,6 @@ export default [
     },
     {
       "api": "market_history_api",
-      "method": "get_market_history_buckets",
-      "params": []
+      "method": "get_market_history_buckets"
     }
 ];

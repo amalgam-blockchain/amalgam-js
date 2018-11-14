@@ -1,6 +1,5 @@
 {
   "url": "https://api.amalgam.money",
   "address_prefix": "AML",
-  "chain_id": "46179a8f45db072e7848bf0a478446dd257dd5ad8e16069ad9852ea280f65591",
-  "broadcast_transaction_with_callback": false
+  "chain_id": "46179a8f45db072e7848bf0a478446dd257dd5ad8e16069ad9852ea280f65591"
 }

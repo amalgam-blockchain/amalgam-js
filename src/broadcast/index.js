@@ -38,9 +38,11 @@ amalgamBroadcast.send = function amalgamBroadcast$send(tx, privKeys, callback) {
         'Broadcasting transaction (transaction, transaction.operations)',
         transaction, transaction.operations
       );
-      return config.get('broadcast_transaction_with_callback') 
-        ? amalgamApi.broadcastTransactionWithCallbackAsync(() => {}, signedTransaction).then(() => signedTransaction)
-        : amalgamApi.broadcastTransactionAsync(signedTransaction).then(() => signedTransaction)
+      return amalgamApi.broadcastTransactionSynchronousAsync(
+        signedTransaction
+      ).then((result) => {
+        return Object.assign({}, result, signedTransaction);
+      });
     });
 
   resultP.nodeify(callback || noop);
@@ -52,15 +54,15 @@ amalgamBroadcast._prepareTransaction = function amalgamBroadcast$_prepareTransac
     .then((properties) => {
       // Set defaults on the transaction
       const chainDate = new Date(properties.time + 'Z');
-      const refBlockNum = (properties.head_block_number - 3) & 0xFFFF;
-      return amalgamApi.getBlockAsync(properties.head_block_number - 2).then((block) => {
+      const refBlockNum = (properties.last_irreversible_block_num - 1) & 0xFFFF;
+      return amalgamApi.getBlockAsync(properties.last_irreversible_block_num).then((block) => {
         const headBlockId = block.previous;
         return Object.assign({
           ref_block_num: refBlockNum,
           ref_block_prefix: new Buffer(headBlockId, 'hex').readUInt32LE(4),
           expiration: new Date(
             chainDate.getTime() +
-            60 * 1000
+            600 * 1000
           ),
         }, tx);
       });

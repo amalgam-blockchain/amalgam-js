@@ -433,12 +433,79 @@ let delegate_vesting_shares = new Serializer(
 }
 );
 
-let fill_convert_request = new Serializer( 
-    "fill_convert_request", {
+let delegate_vesting_shares = new Serializer( 
+    "delegate_vesting_shares", {
+    delegator: string,
+    delegatee: string,
+    vesting_shares: asset
+}
+);
+
+let witness_set_properties = new Serializer( 
+    "witness_set_properties", {
     owner: string,
-    requestid: uint32,
-    amount_in: asset,
-    amount_out: asset
+    props: map((string), (bytes())),
+    extensions: set(future_extensions),
+}
+);
+
+let tbd1 = new Serializer( 
+    "tbd1", {
+    from: string
+}
+);
+
+let tbd2 = new Serializer( 
+    "tbd2", {
+    from: string
+}
+);
+
+let tbd3 = new Serializer( 
+    "tbd3", {
+    from: string
+}
+);
+
+let tbd4 = new Serializer( 
+    "tbd4", {
+    from: string
+}
+);
+
+let tbd5 = new Serializer( 
+    "tbd5", {
+    from: string
+}
+);
+
+let tbd6 = new Serializer( 
+    "tbd6", {
+    from: string
+}
+);
+
+let tbd7 = new Serializer( 
+    "tbd7", {
+    from: string
+}
+);
+
+let tbd8 = new Serializer( 
+    "tbd8", {
+    from: string
+}
+);
+
+let tbd9 = new Serializer( 
+    "tbd9", {
+    from: string
+}
+);
+
+let tbd10 = new Serializer( 
+    "tbd10", {
+    from: string
 }
 );
 
@@ -469,11 +536,6 @@ let fill_order = new Serializer(
 }
 );
 
-let shutdown_witness = new Serializer( 
-    "shutdown_witness",
-    {owner: string}
-);
-
 let fill_transfer_from_savings = new Serializer( 
     "fill_transfer_from_savings", {
     from: string,
@@ -500,6 +562,12 @@ let producer_reward = new Serializer(
     "producer_reward", {
     producer: string,
     vesting_shares: asset
+}
+);
+
+let clear_null_account_balance = new Serializer( 
+    "clear_null_account_balance", {
+    total_cleared: array(asset)
 }
 );
 
@@ -533,15 +601,26 @@ operation.st_operations = [
     custom_binary,    
     decline_voting_rights,    
     delegate_vesting_shares,    
+    witness_set_properties,    
+    tbd1,    
+    tbd2,    
+    tbd3,    
+    tbd4,    
+    tbd5,    
+    tbd6,    
+    tbd7,    
+    tbd8,    
+    tbd9,    
+    tbd10,    
     fill_convert_request,    
     interest,    
     fill_vesting_withdraw,    
     fill_order,    
-    shutdown_witness,    
     fill_transfer_from_savings,    
     hardfork,    
     return_vesting_delegation,    
-    producer_reward
+    producer_reward,    
+    clear_null_account_balance    
 ];
 
 let transaction = new Serializer( 

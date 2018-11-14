@@ -296,6 +296,15 @@ module.exports = [
   },
   {
     "roles": ["active", "owner"],
+    "operation": "witness_set_properties",
+    "params": [
+      "owner",
+      "props",
+      "extensions"
+    ]
+  },
+  {
+    "roles": ["active", "owner"],
     "operation": "tbd1",
     "params": [
       "from"
