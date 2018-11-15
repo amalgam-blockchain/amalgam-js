@@ -102,7 +102,7 @@ export default [
     {
       "api": "database_api",
       "method": "find_owner_histories",
-      "params": ["owner_auths"]
+      "params": ["owner"]
     },
     {
       "api": "database_api",
@@ -122,7 +122,7 @@ export default [
     {
       "api": "database_api",
       "method": "find_change_recovery_account_requests",
-      "params": ["requests"]
+      "params": ["accounts"]
     },
     {
       "api": "database_api",
@@ -132,7 +132,7 @@ export default [
     {
       "api": "database_api",
       "method": "find_escrows",
-      "params": ["escrows"]
+      "params": ["from"]
     },
     {
       "api": "database_api",
@@ -142,7 +142,7 @@ export default [
     {
       "api": "database_api",
       "method": "find_withdraw_vesting_routes",
-      "params": ["routes"]
+      "params": ["account", "order"]
     },
     {
       "api": "database_api",
@@ -152,7 +152,7 @@ export default [
     {
       "api": "database_api",
       "method": "find_savings_withdrawals",
-      "params": ["withdrawals"]
+      "params": ["account"]
     },
     {
       "api": "database_api",
@@ -162,7 +162,7 @@ export default [
     {
       "api": "database_api",
       "method": "find_vesting_delegations",
-      "params": ["delegations"]
+      "params": ["account"]
     },
     {
       "api": "database_api",
@@ -172,7 +172,7 @@ export default [
     {
       "api": "database_api",
       "method": "find_vesting_delegation_expirations",
-      "params": ["delegations"]
+      "params": ["account"]
     },
     {
       "api": "database_api",
@@ -182,7 +182,7 @@ export default [
     {
       "api": "database_api",
       "method": "find_abd_conversion_requests",
-      "params": ["requests"]
+      "params": ["account"]
     },
     {
       "api": "database_api",
@@ -192,7 +192,7 @@ export default [
     {
       "api": "database_api",
       "method": "find_decline_voting_rights_requests",
-      "params": ["requests"]
+      "params": ["accounts"]
     },
     {
       "api": "database_api",
@@ -202,7 +202,7 @@ export default [
     {
       "api": "database_api",
       "method": "find_limit_orders",
-      "params": ["orders"]
+      "params": ["account"]
     },
     {
       "api": "database_api",
