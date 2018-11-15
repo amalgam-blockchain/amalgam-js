@@ -232,7 +232,7 @@ export default [
     {
       "api": "account_by_key_api",
       "method": "get_key_references",
-      "params": ["key"]
+      "params": ["keys"]
     },
     {
       "api": "network_broadcast_api",
@@ -275,7 +275,7 @@ export default [
     {
       "api": "market_history_api",
       "method": "get_market_history",
-      "params": ["bucket_seconds" , "start", "end"]
+      "params": ["bucket_seconds", "start", "end"]
     },
     {
       "api": "market_history_api",
