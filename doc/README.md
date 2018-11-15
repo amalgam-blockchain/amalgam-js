@@ -365,6 +365,12 @@ amalgam.api.findWitnesses(owners, function(err, result) {
   console.log(err, result);
 });
 ```
+### List Witness Votes
+```
+amalgam.api.listWitnessVotes(start, limit, order, function(err, result) {
+  console.log(err, result);
+});
+```
 ### Get Active Witnesses
 ```
 amalgam.api.getActiveWitnesses(function(err, result) {

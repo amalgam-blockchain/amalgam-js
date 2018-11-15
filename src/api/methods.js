@@ -67,6 +67,11 @@ export default [
     },
     {
       "api": "database_api",
+      "method": "list_witness_votes",
+      "params": ["start", "limit", "order"]
+    },
+    {
+      "api": "database_api",
       "method": "get_active_witnesses"
     },
     {
