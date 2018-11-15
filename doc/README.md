@@ -3,17 +3,16 @@
 - [Install](#install)
 - [Browser](#browser)
 - [Config](#config)
-- [Database API](#api)
+- [Database API](#database-api)
     - [Blocks and transactions](#blocks-and-transactions)
     - [Globals](#globals)
-    - [Keys](#keys)
     - [Accounts](#accounts)
-    - [Market](#market)
     - [Authority / validation](#authority--validation)
     - [Witnesses](#witnesses)
-- [Login API](#login)
-- [Broadcast API](#broadcast-api)
-- [Broadcast](#broadcast)
+- [Account By Key API](#account-by-key-api)
+- [Network Broadcast API](#network-broadcast-api)
+- [Market API](#market-api)
+- [Operations](#operations)
 - [Auth](#auth)
 - [Formatter](#formatter)
 - [Utils](#utils)
@@ -33,7 +32,7 @@ amalgam.api.getAccounts(['account1', 'account2'], function(err, response){
 </script>
 ```
 
-## Config
+# Config
 Default config should work with Amalgam. However you can change it to work with local node as 
 ```js
 amalgam.api.setOptions({ url: 'ws://127.0.0.1:8090' });
@@ -49,7 +48,7 @@ amalgam.config.set('address_prefix','AML');
 amalgam.config.get('chain_id');
 ```
 
-# API
+# Database API
 
 ## Blocks and transactions
 
@@ -65,12 +64,24 @@ amalgam.api.getBlock(blockNum, function(err, result) {
   console.log(err, result);
 });
 ```
+### Get Transaction
+```
+amalgam.api.getTransaction(id, function(err, result) {
+  console.log(err, result);
+});
+```
 
 ## Globals
 
 ### Get Config
 ```
 amalgam.api.getConfig(function(err, result) {
+  console.log(err, result);
+});
+```
+### Get Version
+```
+amalgam.api.getVersion(function(err, result) {
   console.log(err, result);
 });
 ```
@@ -86,97 +97,42 @@ amalgam.api.getChainProperties(function(err, result) {
   console.log(err, result);
 });
 ```
+### Get Witness Schedule
+```
+amalgam.api.getWitnessSchedule(function(err, result) {
+  console.log(err, result);
+});
+```
+### Get Reserve Ratio
+```
+amalgam.api.getReserveRatio(function(err, result) {
+  console.log(err, result);
+});
+```
+### Get Hardfork Properties
+```
+amalgam.api.getHardforkProperties(function(err, result) {
+  console.log(err, result);
+});
+```
+### Get Current Price Feed
+```
+amalgam.api.getCurrentPriceFeed(function(err, result) {
+  console.log(err, result);
+});
+```
 ### Get Feed History
 ```
 amalgam.api.getFeedHistory(function(err, result) {
   console.log(err, result);
 });
 ```
-### Get Current Median History Price
-```
-amalgam.api.getCurrentMedianHistoryPrice(function(err, result) {
-  console.log(err, result);
-});
-```
-### Get Hardfork Version
-```
-amalgam.api.getHardforkVersion(function(err, result) {
-  console.log(err, result);
-});
-```
-### Get Next Scheduled Hardfork
-```
-amalgam.api.getNextScheduledHardfork(function(err, result) {
-  console.log(err, result);
-});
-```
-
-## Keys
-
-### Get Key References
-```
-amalgam.api.getKeyReferences(key, function(err, result) {
-  console.log(err, result);
-});
-```
-#### Example:
-```js
-var publicKeys = ['AML...', 'AML...'];
-amalgam.api.getKeyReferences(publicKeys, function(err, result) {
-  //console.log(err, result);
-  if (!err) {
-    result.forEach(function(item) {
-      console.log('getKeyReferences', 'username: [', item[0], ']');
-    });
-  }
-  else console.error(err);
-});
-```
 
 ## Accounts
 
-### Get Accounts
+### List Accounts
 ```
-amalgam.api.getAccounts(names, function(err, result) {
-  console.log(err, result);
-});
-```
-#### Example:
-```js
-var accounts = [ 'account1', 'account2' ];
-amalgam.api.getAccounts(accounts, function(err, result) {
-  //console.log(err, result);
-  if (!err) {
-    result.forEach(function(item) {
-      console.log('getAccounts', 'username: [', item.name, '] id: [', item.id, ']');
-    });
-  }
-  else console.error(err);
-});
-```
-### Lookup Account Names
-```
-amalgam.api.lookupAccountNames(accountNames, function(err, result) {
-  console.log(err, result);
-});
-```
-#### Example:
-```js
-var usernames = ['account1', 'account2'];
-amalgam.api.lookupAccountNames(usernames, function(err, result) {
-  //console.log(err, result);
-  if (!err) {
-    result.forEach(function(item) {
-    if (item) console.log('lookupAccountNames', 'username: [', item.name, '] id: [', item.id, ']');
-    else console.log('lookupAccountNames', 'account not found!');
-    });
-  }
-  else console.error(err);
-});
-```
-### Lookup Accounts
-```
-amalgam.api.lookupAccounts(lowerBoundName, limit, function(err, result) {
+amalgam.api.listAccounts(start, limit, order, function(err, result) {
   console.log(err, result);
 });
 ```
@@ -184,67 +140,174 @@ amalgam.api.lookupAccounts(lowerBoundName, limit, function(err, result) {
 ```js
 var searchAccountsQuery = 'acc';
 var limitResults = 10;
-amalgam.api.lookupAccounts(searchAccountsQuery, limitResults, function(err, result) {
-  //console.log(err, result);
+var orderBy = 'by_name';
+amalgam.api.listAccounts(searchAccountsQuery, limitResults, orderBy, function(err, result) {
   if (!err) {
-    result.forEach(function(item) {
-      console.log('lookupAccounts', 'username: [', item, ']');
+    result.accounts.forEach(function(item) {
+      console.log('listAccounts', 'username: [', item, ']');
     });
   }
   else console.error(err);
 });
 ```
-### Get Account Count
+### Find Accounts
 ```
-amalgam.api.getAccountCount(function(err, result) {
+amalgam.api.findAccounts(accounts, function(err, result) {
   console.log(err, result);
 });
 ```
-### Get Conversion Requests
-```
-amalgam.api.getConversionRequests(accountName, function(err, result) {
-  console.log(err, result);
+#### Example:
+```js
+var accounts = ['account1', 'account2'];
+amalgam.api.findAccounts(accounts, function(err, result) {
+  if (!err) {
+    result.accounts.forEach(function(item) {
+      console.log('findAccounts', 'username: [', item.name, '] id: [', item.id, ']');
+    });
+  }
+  else console.error(err);
 });
 ```
 ### Get Account History
 ```
-amalgam.api.getAccountHistory(account, from, limit, function(err, result) {
+amalgam.api.getAccountHistory(account, start, limit, function(err, result) {
   console.log(err, result);
 });
 ```
-### Get Owner History
+### Get Account Bandwidth
 ```
-amalgam.api.getOwnerHistory(account, function(err, result) {
+amalgam.api.getAccountBandwidth(account, type, function(err, result) {
+  console.log(err, result);
+});
+### List Owner Histories
+```
+amalgam.api.listOwnerHistories(start, limit, function(err, result) {
   console.log(err, result);
 });
 ```
-### Get Recovery Request
+### Find Owner Histories
 ```
-amalgam.api.getRecoveryRequest(account, function(err, result) {
+amalgam.api.findOwnerHistories(ownerAuths, function(err, result) {
   console.log(err, result);
 });
 ```
-
-## Market
-
-### Get Ticker
-```js
-/**
- * getTicker() receive statistic values of the internal AMLD:AML market for the last 24 hours
-*/
-amalgam.api.getTicker(function(err, result) {
+### List Account Recovery Requests
+```
+amalgam.api.listAccountRecoveryRequests(start, limit, order, function(err, result) {
   console.log(err, result);
 });
 ```
-### Get Order Book
+### Find Account Recovery Requests
 ```
-amalgam.api.getOrderBook(limit, function(err, result) {
+amalgam.api.findAccountRecoveryRequests(accounts, function(err, result) {
   console.log(err, result);
 });
 ```
-### Get Open Orders
+### List Change Recovery Account Requests
 ```
-amalgam.api.getOpenOrders(owner, function(err, result) {
+amalgam.api.listChangeRecoveryAccountRequests(start, limit, order, function(err, result) {
+  console.log(err, result);
+});
+```
+### Find Change Recovery Account Requests
+```
+amalgam.api.findChangeRecoveryAccountRequests(requests, function(err, result) {
+  console.log(err, result);
+});
+```
+### List Escrows
+```
+amalgam.api.listEscrows(start, limit, order, function(err, result) {
+  console.log(err, result);
+});
+```
+### Find Escrows
+```
+amalgam.api.findEscrows(escrows, function(err, result) {
+  console.log(err, result);
+});
+```
+### List Withdraw Vesting Routes
+```
+amalgam.api.listWithdrawVestingRoutes(start, limit, order, function(err, result) {
+  console.log(err, result);
+});
+```
+### Find Withdraw Vesting Routes
+```
+amalgam.api.findWithdrawVestingRoutes(routes, function(err, result) {
+  console.log(err, result);
+});
+```
+### List Savings Withdrawals
+```
+amalgam.api.listSavingsWithdrawals(start, limit, order, function(err, result) {
+  console.log(err, result);
+});
+```
+### Find Savings Withdrawals
+```
+amalgam.api.findSavingsWithdrawals(withdrawals, function(err, result) {
+  console.log(err, result);
+});
+```
+### List Vesting Delegations
+```
+amalgam.api.listVestingDelegations(start, limit, order, function(err, result) {
+  console.log(err, result);
+});
+```
+### Find Vesting Delegations
+```
+amalgam.api.findVestingDelegations(delegations, function(err, result) {
+  console.log(err, result);
+});
+```
+### List Vesting Delegation Expirations
+```
+amalgam.api.listVestingDelegationExpirations(start, limit, order, function(err, result) {
+  console.log(err, result);
+});
+```
+### Find Vesting Delegation Expirations
+```
+amalgam.api.findVestingDelegationExpirations(delegations, function(err, result) {
+  console.log(err, result);
+});
+```
+### List ABD Conversion Requests
+```
+amalgam.api.listAbdConversionRequests(start, limit, order, function(err, result) {
+  console.log(err, result);
+});
+```
+### Find ABD Conversion Requests
+```
+amalgam.api.findAbdConversionRequests(requests, function(err, result) {
+  console.log(err, result);
+});
+```
+### List Decline Voting Rights Requests
+```
+amalgam.api.listDeclineVotingRightsRequests(start, limit, order, function(err, result) {
+  console.log(err, result);
+});
+```
+### Find Decline Voting Rights Requests
+```
+amalgam.api.findDeclineVotingRightsRequests(requests, function(err, result) {
+  console.log(err, result);
+});
+```
+### List Limit Orders
+```
+amalgam.api.listLimitOrders(start, limit, order, function(err, result) {
+  console.log(err, result);
+});
+```
+### Find Limit Orders
+```
+amalgam.api.findLimitOrders(orders, function(err, result) {
   console.log(err, result);
 });
 ```
@@ -254,12 +317,6 @@ amalgam.api.getOpenOrders(owner, function(err, result) {
 ### Get Transaction Hex
 ```
 amalgam.api.getTransactionHex(trx, function(err, result) {
-  console.log(err, result);
-});
-```
-### Get Transaction
-```
-amalgam.api.getTransaction(trxId, function(err, result) {
   console.log(err, result);
 });
 ```
@@ -283,40 +340,28 @@ amalgam.api.verifyAuthority(trx, function(err, result) {
 ```
 ### Verify Account Authority
 ```
-amalgam.api.verifyAccountAuthority(nameOrId, signers, function(err, result) {
+amalgam.api.verifyAccountAuthority(account, signers, function(err, result) {
+  console.log(err, result);
+});
+```
+### Verify Signatures
+```
+amalgam.api.verifySignatures(hash, signatures, requiredOwner, requiredActive, requiredPosting, requiredOther, function(err, result) {
   console.log(err, result);
 });
 ```
 
 ## Witnesses
 
-### Get Witnesses
+### List Witnesses
 ```
-amalgam.api.getWitnesses(witnessIds, function(err, result) {
+amalgam.api.listWitnesses(start, limit, order, function(err, result) {
   console.log(err, result);
 });
 ```
-### Get Witness By Account
+### Find Witnesses
 ```
-amalgam.api.getWitnessByAccount(accountName, function(err, result) {
-  console.log(err, result);
-});
-```
-### Get Witnesses By Vote
-```
-amalgam.api.getWitnessesByVote(from, limit, function(err, result) {
-  console.log(err, result);
-});
-```
-### Lookup Witness Accounts
-```
-amalgam.api.lookupWitnessAccounts(lowerBoundName, limit, function(err, result) {
-  console.log(err, result);
-});
-```
-### Get Witness Count
-```
-amalgam.api.getWitnessCount(function(err, result) {
+amalgam.api.findWitnesses(owners, function(err, result) {
   console.log(err, result);
 });
 ```
@@ -327,43 +372,28 @@ amalgam.api.getActiveWitnesses(function(err, result) {
 });
 ```
 
-## Login API
+# Account By Key API
 
-### Login
-
-/!\ It's **not safe** to use this method with your username and password. This method always return `true` and is only used in intern with empty values to enable broadcast.
-
+### Get Key References
 ```
-amalgam.api.login('', '', function(err, result) {
+amalgam.api.getKeyReferences(keys, function(err, result) {
   console.log(err, result);
 });
 ```
 #### Example:
 ```js
-/**
- * login() authorization
- * @param {String} username - user username
- * @param {String} password - user password
-*/
-var username = 'account1';
-var password = 'qwerty12345';
-amalgam.api.login(username, password, function(err, result) {
-  //console.log(err, result);
+var publicKeys = ['AML...', 'AML...'];
+amalgam.api.getKeyReferences(publicKeys, function(err, result) {
   if (!err) {
-    console.log('login', result);
+    result.accounts.forEach(function(item) {
+      console.log('getKeyReferences', 'username: [', item[0], ']');
+    });
   }
   else console.error(err);
 });
 ```
 
-### Get Api By Name
-```
-amalgam.api.getApiByName(apiName, function(err, result) {
-  console.log(err, result);
-});
-```
-
-## Broadcast API
+# Network Broadcast API
 
 ### Broadcast Transaction
 ```
@@ -379,17 +409,57 @@ amalgam.api.broadcastTransactionSynchronous(trx, function(err, result) {
 ```
 ### Broadcast Block
 ```
-amalgam.api.broadcastBlock(b, function(err, result) {
+amalgam.api.broadcastBlock(block, function(err, result) {
   console.log(err, result);
 });
 ```
-### Broadcast Transaction With Callback
+
+# Market API
+
+### Get Ticker
 ```
-amalgam.api.broadcastTransactionWithCallback(confirmationCallback, trx, function(err, result) {
+amalgam.api.getTicker(function(err, result) {
   console.log(err, result);
 });
 ```
-# Broadcast
+### Get Volume
+```
+amalgam.api.getVolume(function(err, result) {
+  console.log(err, result);
+});
+```
+### Get Order Book
+```
+amalgam.api.getOrderBook(limit, function(err, result) {
+  console.log(err, result);
+});
+```
+### Get Trade History
+```
+amalgam.api.getTradeHistory(start, end, limit, function(err, result) {
+  console.log(err, result);
+});
+```
+### Get Recent Trades
+```
+amalgam.api.getRecentTrades(limit, function(err, result) {
+  console.log(err, result);
+});
+```
+### Get Market History
+```
+amalgam.api.getMarketHistory(bucketSeconds, start, end, function(err, result) {
+  console.log(err, result);
+});
+```
+### Get Market History Buckets
+```
+amalgam.api.getMarketHistoryBuckets(function(err, result) {
+  console.log(err, result);
+});
+```
+
+# Operations
 
 ### Account Create
 ```
@@ -433,7 +503,6 @@ var posting = {
 var memoKey = newKeys.memo;
 var jsonMetadata = '{}';
 amalgam.broadcast.accountCreate(wif, fee, creator, newAccountName, owner, active, posting, memoKey, jsonMetadata, function(err, result) {
-  //console.log(err, result);
   if (!err) {
     console.log('accountCreate', result);
   }
@@ -582,7 +651,6 @@ var to = 'account2';
 var amount = '0.001 AML';
 var memo = 'gift';
 amalgam.broadcast.transfer(wif, from, to, amount, memo, function(err, result) {
-  //console.log(err, result);
   if (!err) {
     console.log('transfer', result);
   }
@@ -604,6 +672,12 @@ amalgam.broadcast.withdrawVesting(wif, account, vestingShares, function(err, res
 ### Witness Update
 ```
 amalgam.broadcast.witnessUpdate(wif, owner, url, blockSigningKey, props, fee, function(err, result) {
+  console.log(err, result);
+});
+```
+### Witness Set Properties
+```
+amalgam.broadcast.witnessSetProperties(wif, owner, props, extensions, function(err, result) {
   console.log(err, result);
 });
 ```

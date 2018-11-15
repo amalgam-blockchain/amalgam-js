@@ -13,7 +13,7 @@ https://github.com/amalgam-blockchain/amalgam-js/tree/master/doc
 ```html 
 <script src="./amalgam.min.js"></script>
 <script>
-amalgam.api.getAccounts(['account1', 'account2'], function(err, response){
+amalgam.api.findAccounts(['account1', 'account2'], function(err, response){
     console.log(err, response);
 });
 </script>
@@ -32,7 +32,7 @@ https://api.amalgam.money By Default
 ## Examples
 ### Get Accounts
 ```js
-amalgam.api.getAccounts(['account1', 'account2'], function(err, result) {
+amalgam.api.findAccounts(['account1', 'account2'], function(err, result) {
 	console.log(err, result);
 });
 ```
