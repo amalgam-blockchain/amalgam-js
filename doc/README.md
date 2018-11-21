@@ -35,7 +35,7 @@ amalgam.api.getAccounts(['account1', 'account2'], function(err, response){
 # Config
 Default config should work with Amalgam. However you can change it to work with local node as 
 ```js
-amalgam.api.setOptions({ url: 'ws://127.0.0.1:8090' });
+amalgam.api.setOptions({ url: 'http://127.0.0.1:8090' });
 ```
 Both WebSocket (ws/wss) and JSON-RPC (http/https) protocols are supported to connect to nodes.
 
@@ -143,7 +143,7 @@ var limitResults = 10;
 var orderBy = 'by_name';
 amalgam.api.listAccounts(searchAccountsQuery, limitResults, orderBy, function(err, result) {
   if (!err) {
-    result.accounts.forEach(function(item) {
+    result.forEach(function(item) {
       console.log('listAccounts', 'username: [', item, ']');
     });
   }
@@ -161,7 +161,7 @@ amalgam.api.findAccounts(accounts, function(err, result) {
 var accounts = ['account1', 'account2'];
 amalgam.api.findAccounts(accounts, function(err, result) {
   if (!err) {
-    result.accounts.forEach(function(item) {
+    result.forEach(function(item) {
       console.log('findAccounts', 'username: [', item.name, '] id: [', item.id, ']');
     });
   }
@@ -391,7 +391,7 @@ amalgam.api.getKeyReferences(keys, function(err, result) {
 var publicKeys = ['AML...', 'AML...'];
 amalgam.api.getKeyReferences(publicKeys, function(err, result) {
   if (!err) {
-    result.accounts.forEach(function(item) {
+    result.forEach(function(item) {
       console.log('getKeyReferences', 'username: [', item[0], ']');
     });
   }
