@@ -40,11 +40,10 @@ export function jsonRpc(uri, {method, id, params}) {
 }
 
 export default class HttpTransport extends Transport {
-  send(api, data, callback) {
-    debug('Amalgam::send', api, data);
-    const id = data.id || this.id++;
-    const params = [api, data.method, data.params];
-    jsonRpc(this.options.uri, {method: 'call', id, params})
+  send(method, params, callback) {
+    debug('Amalgam::send', method, params);
+    const id = this.id++;
+    jsonRpc(this.options.uri, {method, id, params})
       .then(res => { callback(null, res) }, err => { callback(err) })
   }
 }

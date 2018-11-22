@@ -433,14 +433,6 @@ let delegate_vesting_shares = new Serializer(
 }
 );
 
-let delegate_vesting_shares = new Serializer( 
-    "delegate_vesting_shares", {
-    delegator: string,
-    delegatee: string,
-    vesting_shares: asset
-}
-);
-
 let witness_set_properties = new Serializer( 
     "witness_set_properties", {
     owner: string,
@@ -506,6 +498,15 @@ let tbd9 = new Serializer(
 let tbd10 = new Serializer( 
     "tbd10", {
     from: string
+}
+);
+
+let fill_convert_request = new Serializer( 
+    "fill_convert_request", {
+    owner: string,
+    requestid: uint32,
+    amount_in: asset,
+    amount_out: asset
 }
 );
 

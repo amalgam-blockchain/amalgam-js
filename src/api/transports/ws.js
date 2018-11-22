@@ -61,8 +61,8 @@ export default class WsTransport extends Transport {
     }
   }
 
-  send(api, data, callback) {
-    debug('Amalgam::send', api, data);
+  send(method, params, callback) {
+    debug('Amalgam::send', method, params);
     return this.start().then(() => {
       const deferral = {};
       new Promise((resolve, reject) => {
@@ -79,10 +79,10 @@ export default class WsTransport extends Transport {
         deferral,
         startedAt: Date.now(),
         message: {
-          id: data.id || this.id++,
-          method: 'call',
+          id: this.id++,
           jsonrpc: '2.0',
-          params: [api, data.method, data.params]        
+          method: method,
+          params: params
         }
       };
       this.inFlight++;

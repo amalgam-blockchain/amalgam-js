@@ -719,6 +719,7 @@ Types.optional = function(st_operation){
 };
 
 Types.static_variant = function(_st_operations){
+    let suffix = "_operation";
     return {
         nosort: true,
         st_operations: _st_operations,
@@ -728,7 +729,7 @@ Types.static_variant = function(_st_operations){
             type_id = value
         else {
             for(let op of this.st_operations) {
-                if(op.operation_name === value) {
+                if(op.operation_name + suffix === value) {
                     type_id = pos
                     break
                 }
@@ -744,45 +745,48 @@ Types.static_variant = function(_st_operations){
             console.error(`static_variant id 0x${type_id.toString(16)} (${type_id})`);
         }
         v.required(st_operation, `operation ${type_id}`);
-        return [
-            type_id,
-            st_operation.fromByteBuffer(b)
-        ];
+        return {
+            type: type_id,
+            value: st_operation.fromByteBuffer(b)
+        };
     },
     appendByteBuffer(b, object){
         v.required(object);
-        var type_id = this.opTypeId(object[0]);
+        var type_id = this.opTypeId(object.type);
         var st_operation = this.st_operations[type_id];
         v.required(st_operation, `operation ${type_id}`);
         b.writeVarint32(type_id);
-        st_operation.appendByteBuffer(b, object[1]);
+        st_operation.appendByteBuffer(b, object.value);
         return;
     },
     fromObject(object){
         v.required(object);
-        let type_id = this.opTypeId(object[0]);
+        let type_id = this.opTypeId(object.type);
         var st_operation = this.st_operations[type_id];
         v.required(st_operation, `operation ${type_id}`);
-        return [
-            type_id,
-            st_operation.fromObject(object[1])
-        ];
+        return {
+            type: type_id,
+            value: st_operation.fromObject(object.value)
+        };
     },
     toObject(object, debug = {}){
         if (debug.use_default && object === undefined) {
-            return [this.st_operations[0].operation_name, this.st_operations[0].toObject(undefined, debug)];
+            return {
+                type: this.st_operations[0].operation_name + suffix,
+                value: this.st_operations[0].toObject(undefined, debug)
+            };
         }
         v.required(object);
-        let type_id = this.opTypeId(object[0]);
+        let type_id = this.opTypeId(object.type);
         var st_operation = this.st_operations[type_id];
         v.required(st_operation, `operation ${type_id}`);
-        return [
-            st_operation.operation_name,
-            st_operation.toObject(object[1], debug)
-        ];
+        return {
+            type: st_operation.operation_name + suffix,
+            value: st_operation.toObject(object.value, debug)
+        };
     },
     compare(a, b) {
-        return strCmp(this.opTypeId(a[0]), this.opTypeId(b[0]))
+        return strCmp(this.opTypeId(a.type), this.opTypeId(b.type))
     }
     };
 };

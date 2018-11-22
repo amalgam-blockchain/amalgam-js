@@ -18,10 +18,7 @@ class Amalgam extends EventEmitter {
             const methodParams = method.params || [];
 
             this[`${methodName}With`] = (options, callback) => {
-                return this.send(method.api, {
-                    method: method.method,
-                    params: methodParams.map(param => options[param])
-                }, callback);
+                return this.send(method.api + '.' + method.method, options || {}, callback);
             };
 
             this[methodName] = (...args) => {
@@ -114,12 +111,12 @@ class Amalgam extends EventEmitter {
         return this.transport.stop();
     }
 
-    send(api, data, callback) {
+    send(method, params, callback) {
         var cb = callback;
         if (this.__logger) {
             let id = Math.random();
             let self = this;
-            this.log('xmit:' + id + ':', data)
+            this.log('xmit:' + id + ':', params)
             cb = function(e, d) {
                 if (e) {
                     self.log('error', 'rsp:' + id + ':\n\n', e, d)
@@ -131,7 +128,7 @@ class Amalgam extends EventEmitter {
                 }
             }
         }
-        return this.transport.send(api, data, cb);
+        return this.transport.send(method, params, cb);
     }
 
     setOptions(options) {

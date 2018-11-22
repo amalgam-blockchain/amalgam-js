@@ -85,13 +85,13 @@ operations.forEach((operation) => {
       }
       return amalgamBroadcast.send({
         extensions: [],
-        operations: [[operation.operation, Object.assign(
+        operations: [{type: operation.operation + "_operation", value: Object.assign(
           {},
           options,
           options.json_metadata != null ? {
             json_metadata: toString(options.json_metadata),
           } : {}
-        )]],
+        )}],
       }, keys, callback);
     };
 
