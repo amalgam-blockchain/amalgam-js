@@ -11,7 +11,7 @@
     - [Witnesses](#witnesses)
 - [Account By Key API](#account-by-key-api)
 - [Network Broadcast API](#network-broadcast-api)
-- [Market API](#market-api)
+- [Market History API](#market-history-api)
 - [Operations](#operations)
 - [Auth](#auth)
 - [Formatter](#formatter)
@@ -462,7 +462,7 @@ amalgam.api.broadcastBlock(block, function(err, result) {
 });
 ```
 
-# Market API
+# Market History API
 
 ### Get Ticker
 ```
