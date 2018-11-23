@@ -51,96 +51,6 @@ module.exports = amalgamAPI => {
     return { savings_pending, savings_abd_pending };
   }
 
-  function estimateAccountValue(
-    account,
-    { gprops, feed_price, open_orders, savings_withdraws, vesting_amalgam } = {}
-  ) {
-    const promises = [];
-    const username = account.name;
-    const assetPrecision = 1000;
-    let orders, savings;
-
-    if (!vesting_amalgam || !feed_price) {
-      if (!gprops || !feed_price) {
-        promises.push(
-          amalgamAPI.getStateAsync(`/@{username}`).then(data => {
-            gprops = data.props;
-            feed_price = data.feed_price;
-            vesting_amalgam = vestingAmalgam(account, gprops);
-          })
-        );
-      } else {
-        vesting_amalgam = vestingAmalgam(account, gprops);
-      }
-    }
-
-    if (!open_orders) {
-      promises.push(
-        amalgamAPI.getOpenOrdersAsync(username).then(open_orders => {
-          orders = processOrders(open_orders, assetPrecision);
-        })
-      );
-    } else {
-      orders = processOrders(open_orders, assetPrecision);
-    }
-
-    if (!savings_withdraws) {
-      promises.push(
-        amalgamAPI
-          .getSavingsWithdrawFromAsync(username)
-          .then(savings_withdraws => {
-            savings = calculateSaving(savings_withdraws);
-          })
-      );
-    } else {
-      savings = calculateSaving(savings_withdraws);
-    }
-
-    return Promise.all(promises).then(() => {
-      let price_per_amalgam = undefined;
-      const { base, quote } = feed_price;
-      if (/ AMLD$/.test(base) && / AML$/.test(quote))
-        price_per_amalgam = parseFloat(base.split(" ")[0]);
-      const savings_balance = account.savings_balance;
-      const savings_abd_balance = account.savings_abd_balance;
-      const balance_amalgam = parseFloat(account.balance.split(" ")[0]);
-      const saving_balance_amalgam = parseFloat(savings_balance.split(" ")[0]);
-      const abd_balance = parseFloat(account.abd_balance);
-      const abd_balance_savings = parseFloat(savings_abd_balance.split(" ")[0]);
-
-      let conversionValue = 0;
-      const currentTime = new Date().getTime();
-      (account.other_history || []).reduce((out, item) => {
-        if (get(item, [1, "op", 0], "") !== "convert") return out;
-
-        const timestamp = new Date(get(item, [1, "timestamp"])).getTime();
-        const finishTime = timestamp + 86400000 * 3.5; // add 3.5day conversion delay
-        if (finishTime < currentTime) return out;
-
-        const amount = parseFloat(
-          get(item, [1, "op", 1, "amount"]).replace(" AMLD", "")
-        );
-        conversionValue += amount;
-      }, []);
-
-      const total_abd =
-        abd_balance +
-        abd_balance_savings +
-        savings.savings_abd_pending +
-        orders.abdOrders +
-        conversionValue;
-
-      const total_amalgam =
-        vesting_amalgam +
-        balance_amalgam +
-        saving_balance_amalgam +
-        savings.savings_pending +
-        orders.amalgamOrders;
-
-      return (total_amalgam * price_per_amalgam + total_abd).toFixed(2);
-    });
-  }
-
   function createSuggestedPassword() {
     const PASSWORD_LENGTH = 32;
     const privateKey = key_utils.get_random_key();
@@ -164,7 +74,6 @@ module.exports = amalgamAPI => {
     },
     numberWithCommas,
     vestingAmalgam,
-    estimateAccountValue,
     createSuggestedPassword
   };
 };

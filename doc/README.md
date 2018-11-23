@@ -168,6 +168,12 @@ amalgam.api.findAccounts(accounts, function(err, result) {
   else console.error(err);
 });
 ```
+### Get Account Count
+```
+amalgam.api.getAccountCount(function(err, result) {
+  console.log(err, result);
+});
+```
 ### Get Account History
 ```
 amalgam.api.getAccountHistory(account, start, limit, function(err, result) {
@@ -187,7 +193,7 @@ amalgam.api.listOwnerHistories(start, limit, function(err, result) {
 ```
 ### Find Owner Histories
 ```
-amalgam.api.findOwnerHistories(ownerAuths, function(err, result) {
+amalgam.api.findOwnerHistories(owner, function(err, result) {
   console.log(err, result);
 });
 ```
@@ -211,7 +217,7 @@ amalgam.api.listChangeRecoveryAccountRequests(start, limit, order, function(err,
 ```
 ### Find Change Recovery Account Requests
 ```
-amalgam.api.findChangeRecoveryAccountRequests(requests, function(err, result) {
+amalgam.api.findChangeRecoveryAccountRequests(accounts, function(err, result) {
   console.log(err, result);
 });
 ```
@@ -223,7 +229,13 @@ amalgam.api.listEscrows(start, limit, order, function(err, result) {
 ```
 ### Find Escrows
 ```
-amalgam.api.findEscrows(escrows, function(err, result) {
+amalgam.api.findEscrows(from, function(err, result) {
+  console.log(err, result);
+});
+```
+### Get Escrow
+```
+amalgam.api.getEscrow(from, escrow_id, function(err, result) {
   console.log(err, result);
 });
 ```
@@ -235,7 +247,7 @@ amalgam.api.listWithdrawVestingRoutes(start, limit, order, function(err, result)
 ```
 ### Find Withdraw Vesting Routes
 ```
-amalgam.api.findWithdrawVestingRoutes(routes, function(err, result) {
+amalgam.api.findWithdrawVestingRoutes(account, order, function(err, result) {
   console.log(err, result);
 });
 ```
@@ -245,9 +257,15 @@ amalgam.api.listSavingsWithdrawals(start, limit, order, function(err, result) {
   console.log(err, result);
 });
 ```
-### Find Savings Withdrawals
+### Find Savings Withdrawals From
 ```
-amalgam.api.findSavingsWithdrawals(withdrawals, function(err, result) {
+amalgam.api.findSavingsWithdrawalsFrom(account, function(err, result) {
+  console.log(err, result);
+});
+```
+### Find Savings Withdrawals To
+```
+amalgam.api.findSavingsWithdrawalsTo(account, function(err, result) {
   console.log(err, result);
 });
 ```
@@ -259,7 +277,7 @@ amalgam.api.listVestingDelegations(start, limit, order, function(err, result) {
 ```
 ### Find Vesting Delegations
 ```
-amalgam.api.findVestingDelegations(delegations, function(err, result) {
+amalgam.api.findVestingDelegations(account, function(err, result) {
   console.log(err, result);
 });
 ```
@@ -271,7 +289,7 @@ amalgam.api.listVestingDelegationExpirations(start, limit, order, function(err, 
 ```
 ### Find Vesting Delegation Expirations
 ```
-amalgam.api.findVestingDelegationExpirations(delegations, function(err, result) {
+amalgam.api.findVestingDelegationExpirations(account, function(err, result) {
   console.log(err, result);
 });
 ```
@@ -283,7 +301,7 @@ amalgam.api.listAbdConversionRequests(start, limit, order, function(err, result)
 ```
 ### Find ABD Conversion Requests
 ```
-amalgam.api.findAbdConversionRequests(requests, function(err, result) {
+amalgam.api.findAbdConversionRequests(account, function(err, result) {
   console.log(err, result);
 });
 ```
@@ -295,7 +313,7 @@ amalgam.api.listDeclineVotingRightsRequests(start, limit, order, function(err, r
 ```
 ### Find Decline Voting Rights Requests
 ```
-amalgam.api.findDeclineVotingRightsRequests(requests, function(err, result) {
+amalgam.api.findDeclineVotingRightsRequests(accounts, function(err, result) {
   console.log(err, result);
 });
 ```
@@ -307,7 +325,7 @@ amalgam.api.listLimitOrders(start, limit, order, function(err, result) {
 ```
 ### Find Limit Orders
 ```
-amalgam.api.findLimitOrders(orders, function(err, result) {
+amalgam.api.findLimitOrders(account, function(err, result) {
   console.log(err, result);
 });
 ```
@@ -368,6 +386,30 @@ amalgam.api.findWitnesses(owners, function(err, result) {
 ### List Witness Votes
 ```
 amalgam.api.listWitnessVotes(start, limit, order, function(err, result) {
+  console.log(err, result);
+});
+```
+### Get Witness Votes By Account
+```
+amalgam.api.getWitnessVotesByAccount(account, function(err, result) {
+  console.log(err, result);
+});
+```
+### Get Witness Votes By Witness
+```
+amalgam.api.getWitnessVotesByWitness(account, function(err, result) {
+  console.log(err, result);
+});
+```
+### Get Witnesses By Vote
+```
+amalgam.api.getWitnessesByVote(account, limit, function(err, result) {
+  console.log(err, result);
+});
+```
+### Get Witness Count
+```
+amalgam.api.getWitnessCount(function(err, result) {
   console.log(err, result);
 });
 ```
@@ -813,11 +855,6 @@ amalgam.auth.signTransaction(trx, keys);
 var password = amalgam.formatter.createSuggestedPassword();
 console.log(password);
 // => 'GAz3GYFvvQvgm7t2fQmwMDuXEzDqTzn9'
-```
-
-### Estimate Account Value
-```
-var amalgamPower = amalgam.formatter.estimateAccountValue(account);
 ```
 
 ### Vest To Amalgam

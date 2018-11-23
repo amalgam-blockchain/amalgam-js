@@ -72,6 +72,25 @@ export default [
     },
     {
       "api": "database_api",
+      "method": "get_witness_votes_by_account",
+      "params": ["account"]
+    },
+    {
+      "api": "database_api",
+      "method": "get_witness_votes_by_witness",
+      "params": ["account"]
+    },
+    {
+      "api": "database_api",
+      "method": "get_witnesses_by_vote",
+      "params": ["account", "limit"]
+    },
+    {
+      "api": "database_api",
+      "method": "get_witness_count"
+    },
+    {
+      "api": "database_api",
       "method": "get_active_witnesses"
     },
     {
@@ -83,6 +102,10 @@ export default [
       "api": "database_api",
       "method": "find_accounts",
       "params": ["accounts"]
+    },
+    {
+      "api": "database_api",
+      "method": "get_account_count"
     },
     {
       "api": "database_api",
@@ -136,6 +159,11 @@ export default [
     },
     {
       "api": "database_api",
+      "method": "get_escrow",
+      "params": ["from", "escrow_id"]
+    },
+    {
+      "api": "database_api",
       "method": "list_withdraw_vesting_routes",
       "params": ["start", "limit", "order"]
     },
@@ -151,7 +179,12 @@ export default [
     },
     {
       "api": "database_api",
-      "method": "find_savings_withdrawals",
+      "method": "find_savings_withdrawals_from",
+      "params": ["account"]
+    },
+    {
+      "api": "database_api",
+      "method": "find_savings_withdrawals_to",
       "params": ["account"]
     },
     {
