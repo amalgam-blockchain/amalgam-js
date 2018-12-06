@@ -1,6 +1,6 @@
 {
   "name": "amalgam-js",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Amalgam API JavaScript library",
   "main": "lib/index.js",
   "scripts": {

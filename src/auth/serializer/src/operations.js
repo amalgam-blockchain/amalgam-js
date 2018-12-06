@@ -153,7 +153,8 @@ let transfer_to_vesting = new Serializer(
     "transfer_to_vesting", {
     from: string,
     to: string,
-    amount: asset
+    amount: asset,
+    memo: string
 }
 );
 

@@ -707,7 +707,7 @@ amalgam.broadcast.transfer(wif, from, to, amount, memo, function(err, result) {
 ```
 ### Transfer To Vesting
 ```
-amalgam.broadcast.transferToVesting(wif, from, to, amount, function(err, result) {
+amalgam.broadcast.transferToVesting(wif, from, to, amount, memo, function(err, result) {
   console.log(err, result);
 });
 ```

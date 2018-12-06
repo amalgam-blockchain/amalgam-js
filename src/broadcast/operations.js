@@ -15,7 +15,8 @@ module.exports = [
     "params": [
       "from",
       "to",
-      "amount"
+      "amount",
+      "memo"
     ]
   },
   {
