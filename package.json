@@ -1,6 +1,6 @@
 {
   "name": "amalgam-js",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Amalgam API JavaScript library",
   "main": "lib/index.js",
   "scripts": {
@@ -44,8 +44,8 @@
     "detect-node": "^2.0.3",
     "ecurve": "^1.0.5",
     "lodash": "^4.16.4",
-    "secure-random": "^1.1.1",
-    "ws": "^1.1.1"
+    "secure-random": "^1.1.2",
+    "ws": "^3.3.2"
   },
   "devDependencies": {
     "babel-cli": "^6.16.0",
