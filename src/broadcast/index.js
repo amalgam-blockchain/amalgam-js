@@ -55,7 +55,7 @@ amalgamBroadcast._prepareTransaction = function amalgamBroadcast$_prepareTransac
       // Set defaults on the transaction
       const chainDate = new Date(properties.time + 'Z');
       const refBlockNum = (properties.last_irreversible_block_num - 1) & 0xFFFF;
-      return amalgamApi.getBlockAsync(properties.last_irreversible_block_num).then((block) => {
+      return amalgamApi.getBlockHeaderAsync(properties.last_irreversible_block_num).then((block) => {
         const headBlockId = block.previous;
         return Object.assign({
           ref_block_num: refBlockNum,
