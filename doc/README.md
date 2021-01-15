@@ -26,7 +26,7 @@ $ npm install git+https://github.com/amalgam-blockchain/amalgam-js --save
 ```html 
 <script src="./amalgam.min.js"></script>
 <script>
-amalgam.api.getAccounts(['account1', 'account2'], function(err, response){
+amalgam.api.findAccounts(['account1', 'account2'], function(err, response){
     console.log(err, response);
 });
 </script>
